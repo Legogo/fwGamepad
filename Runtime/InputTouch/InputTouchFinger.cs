@@ -4,8 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// All information for one finger
 /// </summary>
-
-namespace inputeer
+namespace fwp.inputeer
 {
   public class InputTouchFinger
   {

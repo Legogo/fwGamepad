@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-
-namespace inputeer
+namespace fwp.inputeer
 {
     public class InputTouchBridge : MonoBehaviour
     {

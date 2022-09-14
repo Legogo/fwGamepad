@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace inputeer
+namespace fwp.inputeer
 {
   public class InputGyroBridge : MonoBehaviour
   {

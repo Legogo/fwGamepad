@@ -6,8 +6,7 @@ using System.Collections;
 /// This is meant to facilitate de capture / release of the mouse cursor
 /// Just call lockMouse everyframe (or whenever useful) by giving the current state of locking you need
 /// </summary>
-
-namespace inputeer
+namespace fwp.inputeer
 {
   public class InputMouseLocker
   {

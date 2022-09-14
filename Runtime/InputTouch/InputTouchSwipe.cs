@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
-namespace inputeer
+namespace fwp.inputeer
 {
   public class InputTouchSwipe
   {

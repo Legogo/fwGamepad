@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System;
 using UnityEngine;
-
-namespace inputeer
+namespace fwp.inputeer
 {
   public class InputTouchPinch
   {

@@ -5,8 +5,7 @@ using UnityEngine;
 /// <summary>
 /// this will display data on screen about whatever is going on in the whole InputTouchBridge thing
 /// </summary>
-
-namespace inputeer
+namespace fwp.inputeer
 {
   public class InputTouchDebug : MonoBehaviour
   {

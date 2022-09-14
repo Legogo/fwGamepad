@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace inputeer
+namespace fwp.inputeer
 {
-  public class InputKeyAttack : InputKey
-  {
+  public class InputKeyAttack : InputKeySchematic
+    {
     public bool pressed_attack()
     {
       return Input.GetKeyDown(KeyCode.LeftShift);
