@@ -4,14 +4,12 @@ using UnityEngine;
 using System;
 
 /// <summary>
-/// carry de tout les blueprints de touches d'un objet
 /// 
-/// chaque objet peut créer une version de ce mgr
-/// le manager va contenir tout le code lié a l'état des inputs "action context"
+/// not sure of the usage ...
 /// 
 /// </summary>
 
-namespace inputeer
+namespace fwp.inputeer
 {
   public class InputKeyBridge
   {

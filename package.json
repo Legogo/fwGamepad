@@ -1,14 +1,12 @@
 {
-  "name": "com.ab.fwInputeer",
-  "version": "0.1.1",
-  "unity": "2021.2",
-  "unityRelease": "0",
-  "displayName": "ab inputeer",
+  "name": "com.ab.fwp.inputeer",
+  "version": "0.1.2",
+  "displayName": "ab:inputeer",
   "description": "framework for inputs",
   "keywords": [
     "inputs"
   ],
-  "category":"input",
+  "category": "input",
   "repository": {
     "url": "https://github.com/Legogo/fwInputeer.git",
     "type": "git",
