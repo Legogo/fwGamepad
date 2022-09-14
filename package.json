@@ -1,0 +1,22 @@
+{
+  "name": "com.ab.fwInputeer",
+  "version": "0.1.0",
+  "unity": "2020.3",
+  "unityRelease": "0",
+  "displayName": "ab inputeer",
+  "description": "framework for inputs",
+  "keywords": [
+    "inputs"
+  ],
+  "category":"input",
+  "repository": {
+    "url": "https://github.com/Legogo/fwInputeer.git",
+    "type": "git",
+    "revision": "abbad38b8a96d2f3e19b8a420bc3ee81a6d6bf76"
+  },
+  "author": {
+    "name": "Andrei Berloni",
+    "email": "dev@andreberlemont.com",
+    "url": "http://www.andreberlemont.com"
+  }
+}
