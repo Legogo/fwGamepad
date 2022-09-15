@@ -129,6 +129,8 @@ public class ControllerManager : MonoBehaviour
         return controllers[idx];
     }
 
+    public Controller360 getControllerById(int idx) => getController(idx);
+
     virtual public bool anyPressedSkip()
     {
         if (countConnected() < 1) return false;
