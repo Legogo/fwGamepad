@@ -32,6 +32,14 @@ namespace fwp.inputeer
             }
         }
 
+        public int maxControllers
+        {
+            get
+            {
+                return sysBridge.countSystemMaxControllers();
+            }
+        }
+
         protected List<GamepadWatcher> watchers = new List<GamepadWatcher>();
 
         public System.Action<GamepadWatcher> onWatcherStateChanged;
