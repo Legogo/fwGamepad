@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface BlueprintSNES : BlueprintNES
+public class BlueprintSNES : BlueprintNES
 {
-    public bool rawBumperLeft();
-    public bool rawBumperRight();
+    protected bool _bumperLeft;
+    protected bool _bumperRight;
 
-    public bool rawButtonWest();
-    public bool rawButtonNorth();
+    protected bool _buttonWest;
+    protected bool _buttonNorth;
 }
+

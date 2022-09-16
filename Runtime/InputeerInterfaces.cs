@@ -2,9 +2,10 @@ using UnityEngine;
 
 namespace fwp.inputeer
 {
+
     public interface GamepadSelection
     {
-        public void onSelected();
+        public void onSelected(GamepadWatcher watcher);
         public void onUnselected();
     }
 
@@ -12,4 +13,5 @@ namespace fwp.inputeer
     {
         public void onStick(InputJoystickSide side, Vector2 vec);
     }
+
 }

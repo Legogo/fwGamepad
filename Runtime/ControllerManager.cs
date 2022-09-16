@@ -64,13 +64,13 @@ namespace fwp.inputeer
 
             for (int i = 0; i < signs.Count; i++)
             {
-                if (signs[i].state != watchers[i].state)
+                if (signs[i].state != watchers[i].plugState)
                 {
-                    watchers[i].state = signs[i].state;
+                    watchers[i].plugState = signs[i].state;
 
-                    if(watchers[i].state == GamepadWatcher.WatcherState.PLUGGED)
+                    if(watchers[i].plugState == GamepadWatcher.WatcherState.PLUGGED)
                         onWatcherStateChanged?.Invoke(watchers[i]);
-                    else if(watchers[i].state == GamepadWatcher.WatcherState.UNPLUGGED)
+                    else if(watchers[i].plugState == GamepadWatcher.WatcherState.UNPLUGGED)
                         onWatcherStateChanged?.Invoke(watchers[i]);
                 }
             }

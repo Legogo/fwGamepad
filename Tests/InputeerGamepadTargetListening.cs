@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using fwp.inputeer;
 
-public class InputeerGamepadTarget : MonoBehaviour, GamepadSelection
+public class InputeerGamepadTargetListening : MonoBehaviour, GamepadDualStick
 {
+
     SubsDualStick _looker;
 
     public void onSelected(GamepadWatcher watcher)
@@ -19,16 +20,12 @@ public class InputeerGamepadTarget : MonoBehaviour, GamepadSelection
         _looker = null;
     }
 
-    void Update()
+    public void onStick(InputJoystickSide side, Vector2 vec)
     {
+        Debug.Log(side);
+        Debug.Log(vec + " , " + vec.sqrMagnitude);
 
-        if(_looker != null)
-        {
-            Vector2 _joy = _looker.getJoystickState(InputJoystickSide.LEFT);
-
-            transform.Translate(_joy * Time.deltaTime * 20f);
-        }
-
+        //transform.Translate(vec * Time.deltaTime * 10f);
     }
 
 }

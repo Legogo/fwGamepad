@@ -5,72 +5,98 @@ namespace fwp.inputeer
 {
     public class SubsDualStick : SubsController
     {
+        protected Vector2 _joyLeft;
+        protected Vector2 _joyRight;
+
         public Action<InputJoystickSide, Vector2> onJoystickPerformed;
         public Action<InputJoystickSide> onJoystickReleased;
-        public Action<InputButtons, bool> onButtonPerformed;
-        public Action<InputTriggers, float> onTriggerPerformed;
-        public Action<InputDPad, bool> onDPadPerformed;
-
-        public void subTriggers(bool sub, Action<InputTriggers, float> performed)
-        {
-            if (sub)
-            {
-                if (performed != null) onTriggerPerformed += performed;
-            }
-            else
-            {
-                if (performed != null) onTriggerPerformed -= performed;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void subButtons(bool sub, Action<InputButtons, bool> performed)
-        {
-            if (sub)
-            {
-                if (performed != null) onButtonPerformed += performed;
-            }
-            else
-            {
-                if (performed != null) onButtonPerformed -= performed;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void subDPad(bool sub, Action<InputDPad, bool> performed)
-        {
-            if (sub)
-            {
-                if (performed != null) onDPadPerformed += performed;
-            }
-            else
-            {
-                if (performed != null) onDPadPerformed -= performed;
-            }
-        }
 
         /// <summary>
         /// pour les kappa de move
         /// performed = EACH FRAME until neutral
         /// release = when stick go back to neutral
         /// </summary>
-        public void subJoysticks(bool sub, Action<InputJoystickSide, Vector2> performed, Action<InputJoystickSide> release = null)
+        public void subJoysticks(Action<InputJoystickSide, Vector2> performed, Action<InputJoystickSide> release = null)
         {
-            if (sub)
+            if (performed != null)
             {
-                if (performed != null) onJoystickPerformed += performed;
-                if (release != null) onJoystickReleased += release;
-            }
-            else
-            {
-                if (performed != null) onJoystickPerformed -= performed;
-                if (release != null) onJoystickReleased -= release;
+                onJoystickPerformed += (InputJoystickSide side, Vector2 joy) =>
+                {
+                    switch (side)
+                    {
+                        case InputJoystickSide.LEFT:
+                            _joyLeft = joy;
+                            break;
+                        case InputJoystickSide.RIGHT:
+                            _joyRight = joy;
+                            break;
+                    }
+
+                    performed?.Invoke(side, joy);
+                };
             }
 
+            if (release != null)
+            {
+                onJoystickReleased += (InputJoystickSide side) =>
+                {
+                    switch (side)
+                    {
+                        case InputJoystickSide.LEFT:
+                            _joyLeft = Vector2.zero;
+                            break;
+                        case InputJoystickSide.RIGHT:
+                            _joyRight = Vector2.zero;
+                            break;
+                    }
+
+                    release?.Invoke(side);
+                };
+            }
         }
+
+        public Vector2 getJoystickState(InputJoystickSide side)
+        {
+            switch (side)
+            {
+                case InputJoystickSide.LEFT: return _joyLeft;
+                case InputJoystickSide.RIGHT: return _joyRight;
+            }
+            return Vector2.zero;
+        }
+
+        protected float _triggerLeft;
+        protected float _triggerRight;
+
+        public Action<InputTriggers, float> onTriggerPerformed;
+
+        public void subTriggers(Action<InputTriggers, float> performed)
+        {
+            onTriggerPerformed += (InputTriggers trig, float val) =>
+            {
+                switch (trig)
+                {
+                    case InputTriggers.LEFT:
+                        _triggerLeft = val;
+                        break;
+                    case InputTriggers.RIGHT:
+                        _triggerRight = val;
+                        break;
+                }
+
+                performed.Invoke(trig, val);
+            };
+        }
+
+        public float getTriggerState(InputTriggers trigger)
+        {
+            switch (trigger)
+            {
+                case InputTriggers.LEFT: return _triggerLeft;
+                case InputTriggers.RIGHT: return _triggerRight;
+            }
+            return 0f;
+        }
+
     }
 }

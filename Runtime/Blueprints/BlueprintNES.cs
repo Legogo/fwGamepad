@@ -2,13 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface BlueprintNES : ControllerBlueprint
+public class BlueprintNES : ControllerBlueprint
 {
 
-    public bool rawButtonStart();
-    public bool rawButtonBack();
+    protected bool _dpadNorth;
+    protected bool _dpadSouth;
+    protected bool _dpadEast;
+    protected bool _dpadWest;
 
-    public bool rawButtonEast();
-    public bool rawButtonSouth();
+    protected bool _buttonEast;
+    protected bool _buttonSouth;
+
+    protected bool _buttonStart;
+    protected bool _buttonBack;
 
 }

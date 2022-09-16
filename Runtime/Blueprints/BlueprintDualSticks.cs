@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public interface BlueprintDualSticks : BlueprintSNES
+namespace fwp.inputeer
 {
-    public Vector2 rawLeftJoystick();
-    public Vector2 rawRightJoystick();
 
-    public float rawTriggerLeft();
-    public float rawTriggerRight();
+    public class BlueprintDualSticks : BlueprintSNES
+    {
+        Vector2 _joyLeft;
+        Vector2 _joyRight;
 
-    public bool rawDpadNorth();
-    public bool rawDpadSouth();
-    public bool rawDpadEast();
-    public bool rawDpadWest();
+        float _triggerLeft;
+        float _triggerRight;
+
+    }
+
 }

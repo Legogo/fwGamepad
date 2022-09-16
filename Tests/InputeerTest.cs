@@ -20,7 +20,7 @@ public class InputeerTest : MonoBehaviour
 
     void onWatcher(GamepadWatcher watcher)
     {
-        if(watcher.state == GamepadWatcher.WatcherState.PLUGGED)
+        if(watcher.plugState == GamepadWatcher.WatcherState.PLUGGED)
         {
             switch(watcher.index)
             {

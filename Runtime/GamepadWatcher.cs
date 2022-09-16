@@ -19,28 +19,29 @@ namespace fwp.inputeer
             PLUGGED
         }
 
-        SubsController subs;
+        public SubsController controllerState;
 
         List<GamepadSelection> focused = new List<GamepadSelection>();
 
         public int index;
-        WatcherState _state = WatcherState.UNKNOWN;
-        public WatcherState state
+
+        WatcherState _plugState = WatcherState.UNKNOWN;
+        public WatcherState plugState
         {
             set
             {
-                if (value == _state) return;
+                if (value == _plugState) return;
 
-                if(_state == WatcherState.UNKNOWN && value != WatcherState.UNKNOWN)
+                if(_plugState == WatcherState.UNKNOWN && value != WatcherState.UNKNOWN)
                 {
                     init(new ReactorDualStick());
                 }
 
-                _state = value;
+                _plugState = value;
             }
             get
             {
-                return _state;
+                return _plugState;
             }
         }
 
@@ -51,17 +52,17 @@ namespace fwp.inputeer
 
         public bool isConnected()
         {
-            return state == WatcherState.PLUGGED;
+            return plugState == WatcherState.PLUGGED;
         }
 
         void init(ReactorController reactor)
         {
-            subs = reactor.setup();
+            controllerState = reactor.setup();
 
-            SubsDualStick sds = subs as SubsDualStick;
+            SubsDualStick sds = controllerState as SubsDualStick;
             if (sds != null)
             {
-                sds.subJoysticks(true, onJoystick, (InputJoystickSide side) => onJoystick(side, Vector2.zero));
+                sds.subJoysticks(onJoystick, (InputJoystickSide side) => onJoystick(side, Vector2.zero));
             }
 
             Debug.Log("init gamepad #"+index);
@@ -82,7 +83,7 @@ namespace fwp.inputeer
             if (focused.IndexOf(target) < 0)
             {
                 focused.Add(target);
-                target.onSelected();
+                target.onSelected(this);
             }
         }
 
