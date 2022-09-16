@@ -32,10 +32,7 @@ namespace fwp.inputeer
             {
                 if (value == _plugState) return;
 
-                if(_plugState == WatcherState.UNKNOWN && value != WatcherState.UNKNOWN)
-                {
-                    init(new ReactorDualStick());
-                }
+                //...
 
                 _plugState = value;
             }
@@ -48,6 +45,12 @@ namespace fwp.inputeer
         public GamepadWatcher(int index)
         {
             this.index = index;
+
+            //reactor will create input system object and plug it to subs
+            //and return that subs
+            controllerState = new ReactorDualStick().setup();
+
+            Debug.Log("init gamepad #" + index);
         }
 
         public bool isConnected()
@@ -55,17 +58,24 @@ namespace fwp.inputeer
             return plugState == WatcherState.PLUGGED;
         }
 
-        void init(ReactorController reactor)
+        /// <summary>
+        /// to activate capacity to transfert input to a selection
+        /// </summary>
+        /// <param name="reactor"></param>
+        public void primeTransfertLayer(ReactorController reactor)
         {
-            controllerState = reactor.setup();
+            //controllerState.subButtons((InputButtons button, bool state) => { });
 
             SubsDualStick sds = controllerState as SubsDualStick;
             if (sds != null)
             {
-                sds.subJoysticks(onJoystick, (InputJoystickSide side) => onJoystick(side, Vector2.zero));
+                sds.onJoystickPerformed += onJoystick;
+                sds.onJoystickReleased += (InputJoystickSide side) => onJoystick(side, Vector2.zero);
             }
 
-            Debug.Log("init gamepad #"+index);
+            //... OTHER SUBS
+
+            Debug.Log("gamepad#"+index+" primed transfert layer");
         }
 
         void onJoystick(InputJoystickSide side, Vector2 vec)

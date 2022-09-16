@@ -7,21 +7,12 @@ namespace fwp.inputeer
 {
     public class SubsController
     {
-
-        protected bool _dpadNorth;
-        protected bool _dpadSouth;
-        protected bool _dpadEast;
-        protected bool _dpadWest;
-
-        public Action<InputDPad, bool> onDPadPerformed;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void subDPad(Action<InputDPad, bool> performed)
+        public SubsController()
         {
+
             onDPadPerformed += (InputDPad dpadDirection, bool state) =>
             {
+
                 switch (dpadDirection)
                 {
                     case InputDPad.DPAD_WEST:
@@ -38,45 +29,8 @@ namespace fwp.inputeer
                         break;
                 }
 
-                performed.Invoke(dpadDirection, state);
             };
-        }
 
-        public bool isDpadPressed(InputDPad button)
-        {
-            switch (button)
-            {
-                case InputDPad.DPAD_WEST: return _buttonWest;
-                case InputDPad.DPAD_EAST: return _buttonEast;
-                case InputDPad.DPAD_NORTH: return _buttonNorth;
-                case InputDPad.DPAD_SOUTH: return _buttonSouth;
-            }
-
-            return false;
-        }
-
-
-
-        protected bool _buttonEast;
-        protected bool _buttonSouth;
-
-        protected bool _buttonStart;
-        protected bool _buttonBack;
-
-        protected bool _bumperLeft;
-        protected bool _bumperRight;
-
-        protected bool _buttonWest;
-        protected bool _buttonNorth;
-
-        public Action<InputButtons, bool> onButtonPerformed;
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void subButtons(Action<InputButtons, bool> performed)
-        {
             onButtonPerformed += (InputButtons button, bool state) =>
             {
                 switch (button)
@@ -106,10 +60,44 @@ namespace fwp.inputeer
                         _bumperRight = state;
                         break;
                 }
-
-                performed.Invoke(button, state);
             };
         }
+
+        protected bool _dpadNorth;
+        protected bool _dpadSouth;
+        protected bool _dpadEast;
+        protected bool _dpadWest;
+
+        public Action<InputDPad, bool> onDPadPerformed;
+
+        public bool isDpadPressed(InputDPad button)
+        {
+            switch (button)
+            {
+                case InputDPad.DPAD_WEST: return _dpadWest;
+                case InputDPad.DPAD_EAST: return _dpadEast;
+                case InputDPad.DPAD_NORTH: return _dpadNorth;
+                case InputDPad.DPAD_SOUTH: return _dpadSouth;
+            }
+
+            return false;
+        }
+
+
+
+        protected bool _buttonEast;
+        protected bool _buttonSouth;
+
+        protected bool _buttonStart;
+        protected bool _buttonBack;
+
+        protected bool _bumperLeft;
+        protected bool _bumperRight;
+
+        protected bool _buttonWest;
+        protected bool _buttonNorth;
+
+        public Action<InputButtons, bool> onButtonPerformed;
 
         public bool isButtonPressed(InputButtons button)
         {

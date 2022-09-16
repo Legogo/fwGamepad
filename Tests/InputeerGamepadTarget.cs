@@ -27,6 +27,11 @@ public class InputeerGamepadTarget : MonoBehaviour, GamepadSelection
             Vector2 _joy = _looker.getJoystickState(InputJoystickSide.LEFT);
 
             transform.Translate(_joy * Time.deltaTime * 20f);
+
+            if(_looker.isButtonPressed(InputButtons.PAD_EAST))
+            {
+                //Debug.Log("EAST");
+            }
         }
 
     }

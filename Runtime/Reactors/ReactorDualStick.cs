@@ -92,7 +92,12 @@ namespace fwp.inputeer
         {
 
             // le bouton du nord parmis les XYBA
-            controls.controller.buttonNorth.performed += (InputAction.CallbackContext ctx) => subs.onButtonPerformed?.Invoke(InputButtons.PAD_NORTH, true);
+            controls.controller.buttonNorth.performed += (InputAction.CallbackContext ctx) =>
+            {
+                //Debug.Log("performed:north:true");
+                subs.onButtonPerformed?.Invoke(InputButtons.PAD_NORTH, true);
+            };
+
             controls.controller.buttonNorth.canceled += (InputAction.CallbackContext ctx) => subs.onButtonPerformed?.Invoke(InputButtons.PAD_NORTH, false);
 
             // le bouton du sud parmis les XYBA
