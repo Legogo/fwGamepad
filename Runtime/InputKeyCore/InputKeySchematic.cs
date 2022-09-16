@@ -14,12 +14,12 @@ namespace fwp.inputeer
 {
     abstract public class InputKeySchematic
     {
-        protected List<InputActionKey> all = new List<InputActionKey>();
+        protected List<InputActorKey> all = new List<InputActorKey>();
 
         public InputKeySchematic()
         { }
 
-        protected void assign(InputActionKey[] keys)
+        protected void assign(InputActorKey[] keys)
         {
             all.AddRange(keys);
         }
