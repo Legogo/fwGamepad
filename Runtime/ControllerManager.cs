@@ -88,6 +88,8 @@ namespace fwp.inputeer
 
         virtual public GamepadWatcher getController(int idx)
         {
+            if (idx >= watchers.Count) return null;
+
             if (!watchers[idx].isConnected()) return null;
             return watchers[idx];
         }
