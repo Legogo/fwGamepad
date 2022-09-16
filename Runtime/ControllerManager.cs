@@ -58,6 +58,8 @@ namespace fwp.inputeer
         /// </summary>
         public void boot()
         {
+            Debug.Log("~ControllerManager:boot()");
+
             sysBridge.solveChanges();
         }
 
