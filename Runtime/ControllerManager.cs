@@ -59,7 +59,7 @@ namespace fwp.inputeer
 
             while(watchers.Count < signs.Count)
             {
-                watchers.Add(new GamepadWatcher(signs.Count));
+                watchers.Add(new GamepadWatcher(watchers.Count));
             }
 
             for (int i = 0; i < signs.Count; i++)

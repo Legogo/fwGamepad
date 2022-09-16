@@ -21,7 +21,7 @@ namespace fwp.inputeer
 
         SubsController subs;
 
-        GamepadSelection currentSelection;
+        List<GamepadSelection> focused = new List<GamepadSelection>();
 
         public int index;
         WatcherState _state = WatcherState.UNKNOWN;
@@ -64,27 +64,51 @@ namespace fwp.inputeer
                 sds.subJoysticks(true, onJoystick, (InputJoystickSide side) => onJoystick(side, Vector2.zero));
             }
 
-            Debug.Log("init a gamepad");
+            Debug.Log("init gamepad #"+index);
         }
 
         void onJoystick(InputJoystickSide side, Vector2 vec)
         {
-            GamepadDualStick gds = currentSelection as GamepadDualStick;
-            if (gds != null) gds.onStick(side, vec);
+            for (int i = 0; i < focused.Count; i++)
+            {
+                GamepadDualStick gds = focused[i] as GamepadDualStick;
+                if (gds != null) gds.onStick(side, vec);
+            }
+            
         }
 
-        public void setFocus(GamepadSelection newTarget)
+        public void addFocus(GamepadSelection target)
         {
-            if (newTarget == currentSelection) return;
-
-            if(currentSelection != null)
+            if (focused.IndexOf(target) < 0)
             {
-                currentSelection.onUnselected();
-                currentSelection = null;
+                focused.Add(target);
+                target.onSelected();
+            }
+        }
+
+        public void loseFocus(GamepadSelection target)
+        {
+
+            if (focused.IndexOf(target) > 0)
+            {
+                focused.Remove(target);
+                target.onUnselected();
+            }
+        }
+
+        public void swapFocus(GamepadSelection target)
+        {
+            if(focused.Count > 0)
+            {
+                for (int i = 0; i < focused.Count; i++)
+                {
+                    if (focused[i] != target) focused[i].onUnselected();
+                }
+
+                focused.Clear();
             }
 
-            currentSelection = newTarget;
-            currentSelection.onSelected();
+            addFocus(target);
         }
     }
 

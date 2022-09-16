@@ -24,9 +24,9 @@ public class InputeerTest : MonoBehaviour
         {
             switch(watcher.index)
             {
-                case 0: watcher.setFocus(targetA); break;
-                case 1: watcher.setFocus(targetB); break;
-                case 2: watcher.setFocus(targetC); break;
+                case 0: watcher.swapFocus(targetA); break;
+                case 1: watcher.swapFocus(targetB); break;
+                case 2: watcher.swapFocus(targetC); break;
             }
         }
     }
