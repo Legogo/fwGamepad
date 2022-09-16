@@ -1,0 +1,16 @@
+{
+    "name": "com.ab.fwp.inputeer.test",
+    "rootNamespace": "",
+    "references": [
+        "GUID:28f60fbe4d482d7458c5ef4a841efda8"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

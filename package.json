@@ -1,6 +1,6 @@
 {
   "name": "com.ab.fwp.inputeer",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "displayName": "ab:inputeer",
   "description": "framework for inputs",
   "keywords": [
@@ -16,5 +16,6 @@
     "name": "Andrei Berloni",
     "email": "dev@andreberlemont.com",
     "url": "http://www.andreberlemont.com"
-  }
+  },
+  "type": "library"
 }
