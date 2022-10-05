@@ -50,17 +50,18 @@ namespace fwp.inputeer
 
             sysBridge = new ControllerManagerSysInput();
             sysBridge.onControllerCountChanged += solveWatchers;
-
         }
 
         /// <summary>
         /// when ready trigger a controller check
         /// </summary>
-        public void boot()
+        public ControllerManager boot()
         {
             Debug.Log("~ControllerManager:boot()");
 
             sysBridge.solveChanges();
+
+            return this;
         }
 
         virtual public void solveWatchers()
@@ -97,6 +98,8 @@ namespace fwp.inputeer
         public GamepadWatcher[] getControllers() => watchers.ToArray();
 
         public GamepadWatcher getControllerById(int idx) => getController(idx);
+
+        public bool hasControllers() => connectedCount > 0;
 
         static protected ControllerManager _mgr;
         static public ControllerManager create() => _mgr = new ControllerManager();
