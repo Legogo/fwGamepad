@@ -49,8 +49,8 @@ namespace fwp.inputeer
             //reactor will create input system object and plug it to subs
             //and return that subs
             controllerState = new ReactorDualStick().setup();
-
-            Debug.Log("init gamepad #" + index);
+            
+            Debug.Log("GamepadWatcher, init gamepad #" + index);
         }
 
         public bool isConnected()

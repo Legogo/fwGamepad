@@ -68,10 +68,12 @@ namespace fwp.inputeer
         {
             var signs = sysBridge.signatures;
 
-            while(watchers.Count < signs.Count)
+            int safe = 999;
+            while (watchers.Count < signs.Count && safe > 0)
             {
                 watchers.Add(new GamepadWatcher(watchers.Count));
             }
+            Debug.Assert(safe > 0);
 
             for (int i = 0; i < signs.Count; i++)
             {

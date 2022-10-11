@@ -19,10 +19,12 @@ namespace fwp.inputeer
 
             Debug.Log("solving signatures /w syscount @ " + sysCount);
 
-            while(signatures.Count < sysCount)
+            int safe = 999;
+            while (signatures.Count < sysCount && safe > 0)
             {
                 signatures.Add(new ControllerSignature());
             }
+            Debug.Assert(safe > 0);
 
             for (int i = 0; i < signatures.Count; i++)
             {
