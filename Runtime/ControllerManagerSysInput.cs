@@ -23,6 +23,7 @@ namespace fwp.inputeer
             while (signatures.Count < sysCount && safe > 0)
             {
                 signatures.Add(new ControllerSignature());
+                safe--;
             }
             Debug.Assert(safe > 0);
 

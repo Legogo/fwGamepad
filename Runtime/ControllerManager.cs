@@ -72,6 +72,7 @@ namespace fwp.inputeer
             while (watchers.Count < signs.Count && safe > 0)
             {
                 watchers.Add(new GamepadWatcher(watchers.Count));
+                safe--;
             }
             Debug.Assert(safe > 0);
 
