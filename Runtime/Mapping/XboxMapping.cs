@@ -152,6 +152,24 @@ public partial class @XboxMapping : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""triggerL"",
+                    ""type"": ""Value"",
+                    ""id"": ""3ae51194-af77-4d28-b206-2c3147a58989"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""triggerR"",
+                    ""type"": ""Value"",
+                    ""id"": ""af67a609-651d-497f-8198-763bd8711ed3"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -605,6 +623,28 @@ public partial class @XboxMapping : IInputActionCollection2, IDisposable
                     ""action"": ""pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab02e05c-0e6e-4cfe-84a8-e51aae39234c"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""triggerL"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""786eaad4-408e-4fc9-8aaf-1d61fa48a380"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""triggerR"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -627,6 +667,8 @@ public partial class @XboxMapping : IInputActionCollection2, IDisposable
         m_controller_dPadEast = m_controller.FindAction("dPadEast", throwIfNotFound: true);
         m_controller_buttonStart = m_controller.FindAction("buttonStart", throwIfNotFound: true);
         m_controller_pause = m_controller.FindAction("pause", throwIfNotFound: true);
+        m_controller_triggerL = m_controller.FindAction("triggerL", throwIfNotFound: true);
+        m_controller_triggerR = m_controller.FindAction("triggerR", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -700,6 +742,8 @@ public partial class @XboxMapping : IInputActionCollection2, IDisposable
     private readonly InputAction m_controller_dPadEast;
     private readonly InputAction m_controller_buttonStart;
     private readonly InputAction m_controller_pause;
+    private readonly InputAction m_controller_triggerL;
+    private readonly InputAction m_controller_triggerR;
     public struct ControllerActions
     {
         private @XboxMapping m_Wrapper;
@@ -718,6 +762,8 @@ public partial class @XboxMapping : IInputActionCollection2, IDisposable
         public InputAction @dPadEast => m_Wrapper.m_controller_dPadEast;
         public InputAction @buttonStart => m_Wrapper.m_controller_buttonStart;
         public InputAction @pause => m_Wrapper.m_controller_pause;
+        public InputAction @triggerL => m_Wrapper.m_controller_triggerL;
+        public InputAction @triggerR => m_Wrapper.m_controller_triggerR;
         public InputActionMap Get() { return m_Wrapper.m_controller; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -769,6 +815,12 @@ public partial class @XboxMapping : IInputActionCollection2, IDisposable
                 @pause.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
                 @pause.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
                 @pause.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
+                @triggerL.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnTriggerL;
+                @triggerL.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnTriggerL;
+                @triggerL.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnTriggerL;
+                @triggerR.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnTriggerR;
+                @triggerR.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnTriggerR;
+                @triggerR.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnTriggerR;
             }
             m_Wrapper.m_ControllerActionsCallbackInterface = instance;
             if (instance != null)
@@ -815,6 +867,12 @@ public partial class @XboxMapping : IInputActionCollection2, IDisposable
                 @pause.started += instance.OnPause;
                 @pause.performed += instance.OnPause;
                 @pause.canceled += instance.OnPause;
+                @triggerL.started += instance.OnTriggerL;
+                @triggerL.performed += instance.OnTriggerL;
+                @triggerL.canceled += instance.OnTriggerL;
+                @triggerR.started += instance.OnTriggerR;
+                @triggerR.performed += instance.OnTriggerR;
+                @triggerR.canceled += instance.OnTriggerR;
             }
         }
     }
@@ -835,5 +893,7 @@ public partial class @XboxMapping : IInputActionCollection2, IDisposable
         void OnDPadEast(InputAction.CallbackContext context);
         void OnButtonStart(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnTriggerL(InputAction.CallbackContext context);
+        void OnTriggerR(InputAction.CallbackContext context);
     }
 }

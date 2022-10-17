@@ -24,6 +24,8 @@ namespace fwp.inputeer
             setupButtons();
             setupJoysticks();
             setupBumpers();
+            setupTriggers();
+
             setupGlobals();
 
             controls.Enable();
@@ -41,6 +43,24 @@ namespace fwp.inputeer
 
             controls.controller.bumperR.performed += (InputAction.CallbackContext ctx) => subs.onButtonPerformed?.Invoke(InputButtons.BR, true);
             controls.controller.bumperR.canceled += (InputAction.CallbackContext ctx) => subs.onButtonPerformed?.Invoke(InputButtons.BR, false);
+
+        }
+
+        void setupTriggers()
+        {
+            controls.controller.triggerL.performed += (InputAction.CallbackContext ctx) =>
+            {
+                float val = ctx.ReadValue<float>();
+                subs.onTriggerPerformed?.Invoke(InputTriggers.LEFT, val);
+            };
+            controls.controller.triggerL.canceled += (InputAction.CallbackContext ctx) => subs.onTriggerPerformed(InputTriggers.LEFT, 0f);
+
+            controls.controller.triggerR.performed += (InputAction.CallbackContext ctx) =>
+            {
+                float val = ctx.ReadValue<float>();
+                subs.onTriggerPerformed?.Invoke(InputTriggers.RIGHT, val);
+            };
+            controls.controller.triggerR.canceled += (InputAction.CallbackContext ctx) => subs.onTriggerPerformed(InputTriggers.RIGHT, 0f);
 
         }
 

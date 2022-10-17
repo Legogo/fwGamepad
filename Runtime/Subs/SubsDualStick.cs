@@ -84,5 +84,16 @@ namespace fwp.inputeer
             return 0f;
         }
 
+        public override string stringify()
+        {
+            string output = base.stringify();
+
+            output += $"\n TRIGGER  : L?{_triggerLeft} R?{_triggerRight}";
+            output += $"\n JOYL     : {_joyLeft.x}x{_joyLeft.y}";
+            output += $"\n JOYR     : {_joyRight.x}x{_joyRight.y}";
+
+            return output;
+        }
     }
+
 }

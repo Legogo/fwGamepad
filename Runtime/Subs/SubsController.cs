@@ -83,19 +83,18 @@ namespace fwp.inputeer
             return false;
         }
 
-
-
-        protected bool _buttonEast;
+        
+        protected bool _buttonNorth;
         protected bool _buttonSouth;
 
+        protected bool _buttonWest;
+        protected bool _buttonEast;
+        
         protected bool _buttonStart;
         protected bool _buttonBack;
 
         protected bool _bumperLeft;
         protected bool _bumperRight;
-
-        protected bool _buttonWest;
-        protected bool _buttonNorth;
 
         public Action<InputButtons, bool> onButtonPerformed;
 
@@ -114,6 +113,17 @@ namespace fwp.inputeer
             }
 
             return false;
+        }
+        
+        virtual public string stringify()
+        {
+            string output = "pad";
+            
+            output += $"\n DPAD   : N?{_dpadNorth} S?{_dpadSouth} W?{_dpadWest} E?{_dpadEast}";
+            output += $"\n BUTTON : N?{_buttonNorth} S?{_buttonSouth} W?{_buttonWest} E?{_buttonEast}";
+            output += $"\n BUMPER : L?{_bumperLeft} R?{_bumperRight}";
+
+            return output;
         }
     }
 }
