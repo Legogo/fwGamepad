@@ -1,5 +1,5 @@
 {
-    "name": "com.ab.fwp.inputeer",
+    "name": "com.ab.fwp.gamepad",
     "rootNamespace": "",
     "references": [
         "Unity.InputSystem"

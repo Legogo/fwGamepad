@@ -1,7 +1,7 @@
 {
-  "name": "com.ab.fwp.inputeer",
-  "version": "0.2.6",
-  "displayName": "ab:inputeer",
+  "name": "com.ab.fwp.gamepad",
+  "version": "0.3.1",
+  "displayName": "ab:gamepad",
   "description": "framework for inputs",
   "keywords": [
     "inputs"
