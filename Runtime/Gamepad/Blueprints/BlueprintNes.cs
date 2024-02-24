@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace fwp.inputeer.blueprint
+namespace fwp.gamepad.blueprint
 {
-    using fwp.inputeer.state;
+    using state;
 
     [System.Serializable]
     public class BlueprintNes

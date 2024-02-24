@@ -1,4 +1,4 @@
-﻿namespace fwp.inputeer
+﻿namespace fwp.gamepad
 {
     /// <summary>
     /// NESW must match PadSectionDirection

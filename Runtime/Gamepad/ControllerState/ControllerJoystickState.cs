@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace fwp.inputeer.state
+namespace fwp.gamepad.state
 {
     [System.Serializable]
     public struct ControllerJoystickState

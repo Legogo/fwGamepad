@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace fwp.inputeer
+namespace fwp.gamepad
 {
 
     /// <summary>

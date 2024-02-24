@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace fwp.inputeer.state
+namespace fwp.gamepad.state
 {
     public struct ControllerTriggerState
     {

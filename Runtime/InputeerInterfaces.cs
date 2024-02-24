@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace fwp.inputeer
+namespace fwp.gamepad
 {
 	/// <summary>
 	/// interface pour les candidates de la selection

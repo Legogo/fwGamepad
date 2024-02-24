@@ -5,7 +5,7 @@ using System;
 
 using System.Collections.ObjectModel;
 
-namespace fwp.inputeer
+namespace fwp.gamepad
 {
     /// <summary>
     /// bridge to provide acces to any controller
