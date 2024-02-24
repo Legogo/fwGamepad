@@ -1,5 +1,35 @@
-namespace fwp.inputeer
+﻿namespace fwp.inputeer
 {
+    /// <summary>
+    /// NESW must match PadSectionDirection
+    /// </summary>
+    public enum InputButtons
+    {
+        NONE,
+        PAD_NORTH, PAD_EAST, PAD_SOUTH, PAD_WEST, // ABXY
+        START, RETURN,
+        BL, BR // bumper (top)
+    }
+
+    /// <summary>
+    /// NESW must match PadSectionDirection
+    /// </summary>
+    public enum InputDPad
+    {
+        NONE,
+        DPAD_NORTH, DPAD_EAST, DPAD_SOUTH, DPAD_WEST //DPad
+    }
+
+    public enum InputTriggers
+    {
+        LT, RT
+    }
+
+    public enum InputJoystickSide
+    {
+        LEFT, RIGHT
+    }
+
     public enum InputType
     {
         JOYL, JOYR,
@@ -8,26 +38,16 @@ namespace fwp.inputeer
         DPAD
     }
 
-    public enum InputTriggers
+    public enum PadSection
     {
-        LEFT, RIGHT
-    }
+        none, buttons, dpads,
+    };
 
-    public enum InputDPad
+    /// <summary>
+    /// ↑ → ↓ ←
+    /// </summary>
+    public enum PadSectionDirection
     {
-        DPAD_WEST, DPAD_EAST, DPAD_NORTH, DPAD_SOUTH //DPad
-    }
-
-    public enum InputJoystickSide
-    {
-        LEFT, RIGHT
-    }
-
-    public enum InputButtons
-    {
-        PAD_WEST, PAD_EAST, PAD_NORTH, PAD_SOUTH, // ABXY
-        START, RETURN,
-        BL, BR // bumper (top)
-    }
-
+        none, north, east, south, west,
+    };
 }

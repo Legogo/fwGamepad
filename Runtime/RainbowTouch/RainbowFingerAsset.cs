@@ -2,109 +2,112 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class RainbowFingerAsset : MonoBehaviour
+namespace fwp.inputeer.rainbow
 {
-
-    //DEBUG STUFF
-    static public List<RainbowFingerAsset> list;
-
-    RainbowFinger finger;
-    TextMesh text;
-
-    Renderer _renderer;
-
-    void Awake()
+    public class RainbowFingerAsset : MonoBehaviour
     {
-        Transform child = transform.Find("fingerInfo");
 
-        _renderer = GetComponent<Renderer>();
+        //DEBUG STUFF
+        static public List<RainbowFingerAsset> list;
 
-        if (child != null)
+        RainbowFinger finger;
+        TextMesh text;
+
+        Renderer _renderer;
+
+        void Awake()
         {
-            text = child.GetComponent<TextMesh>();
-            text.text = "no finger";
-        }
+            Transform child = transform.Find("fingerInfo");
 
-        toggleRender(false);
-    }
+            _renderer = GetComponent<Renderer>();
 
-    void Update()
-    {
-        //Debug.Log(finger.tostring());
-
-        if (finger != null)
-        {
-
-            Vector3 fingerPosition = finger.getWorldPosition();
-            //Debug.Log(fingerPosition);
-            transform.position = fingerPosition;
-
-            if (text != null)
+            if (child != null)
             {
-                string content = "#" + finger.fingerId;
-
-                content += "\n(phase:" + finger.phase + ")";
-                content += "\n(x:" + (int)fingerPosition.x + ",z:" + (int)fingerPosition.z + ")";
-                content += "\nmomentum:" + finger.getMomentum();
-                content += "\ndelta:" + finger.deltaPosition;
-
-                text.text = content;
+                text = child.GetComponent<TextMesh>();
+                text.text = "no finger";
             }
 
-            switch (finger.phase)
+            toggleRender(false);
+        }
+
+        void Update()
+        {
+            //Debug.Log(finger.tostring());
+
+            if (finger != null)
             {
-                case TouchPhase.Began:
-                    toggleRender(true);
-                    break;
-                case TouchPhase.Canceled:
-                    toggleRender(false);
-                    break;
+
+                Vector3 fingerPosition = finger.getWorldPosition();
+                //Debug.Log(fingerPosition);
+                transform.position = fingerPosition;
+
+                if (text != null)
+                {
+                    string content = "#" + finger.fingerId;
+
+                    content += "\n(phase:" + finger.phase + ")";
+                    content += "\n(x:" + (int)fingerPosition.x + ",z:" + (int)fingerPosition.z + ")";
+                    content += "\nmomentum:" + finger.getMomentum();
+                    content += "\ndelta:" + finger.deltaPosition;
+
+                    text.text = content;
+                }
+
+                switch (finger.phase)
+                {
+                    case TouchPhase.Began:
+                        toggleRender(true);
+                        break;
+                    case TouchPhase.Canceled:
+                        toggleRender(false);
+                        break;
+                }
             }
         }
-    }
 
-    void toggleRender(bool flag)
-    {
-        _renderer.enabled = flag;
-
-        if (text != null) text.GetComponent<Renderer>().enabled = flag;
-    }
-
-    public void assignFinger(RainbowFinger f)
-    {
-        finger = f;
-    }
-
-    public bool available()
-    {
-        return !enabled;
-    }
-
-    static public RainbowFingerAsset getFingerAsset()
-    {
-        if (RainbowFingerAsset.list == null) RainbowFingerAsset.list = new List<RainbowFingerAsset>();
-
-        RainbowFingerAsset current = null;
-        foreach (RainbowFingerAsset obj in RainbowFingerAsset.list)
+        void toggleRender(bool flag)
         {
-            if (obj.available()) current = obj;
+            _renderer.enabled = flag;
+
+            if (text != null) text.GetComponent<Renderer>().enabled = flag;
         }
 
-        if (current == null) current = RainbowFingerAsset.newFingerAsset();
+        public void assignFinger(RainbowFinger f)
+        {
+            finger = f;
+        }
 
-        return current;
-    }
+        public bool available()
+        {
+            return !enabled;
+        }
 
-    static public RainbowFingerAsset newFingerAsset()
-    {
-        if (RainbowFingerAsset.list == null) RainbowFingerAsset.list = new List<RainbowFingerAsset>();
+        static public RainbowFingerAsset getFingerAsset()
+        {
+            if (RainbowFingerAsset.list == null) RainbowFingerAsset.list = new List<RainbowFingerAsset>();
 
-        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        RainbowFingerAsset asset = sphere.AddComponent<RainbowFingerAsset>();
+            RainbowFingerAsset current = null;
+            foreach (RainbowFingerAsset obj in RainbowFingerAsset.list)
+            {
+                if (obj.available()) current = obj;
+            }
 
-        RainbowFingerAsset.list.Add(asset);
-        asset.name = "finger-" + RainbowFingerAsset.list.Count;
+            if (current == null) current = RainbowFingerAsset.newFingerAsset();
 
-        return asset;
+            return current;
+        }
+
+        static public RainbowFingerAsset newFingerAsset()
+        {
+            if (RainbowFingerAsset.list == null) RainbowFingerAsset.list = new List<RainbowFingerAsset>();
+
+            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            RainbowFingerAsset asset = sphere.AddComponent<RainbowFingerAsset>();
+
+            RainbowFingerAsset.list.Add(asset);
+            asset.name = "finger-" + RainbowFingerAsset.list.Count;
+
+            return asset;
+        }
     }
 }

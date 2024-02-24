@@ -6,10 +6,8 @@ using System.Collections;
  * http://wiki.unity3d.com/index.php?title=Xbox360Controller pour le mapping des axis
  * */
 
-namespace fwp.inputeer
+namespace fwp.inputeer.xinput
 {
-
-
     public class Controller360 : MonoBehaviour
     {
 

@@ -1,18 +1,21 @@
 using UnityEngine;
 using System.Collections;
+
+#if xinput
 using XInputDotNetPure;
+#endif
 
 /*
  * More information at
  * https://github.com/speps/XInputDotNet
  * */
 
-namespace fwp.inputeer
+namespace fwp.inputeer.xinput
 {
 
     public class XinputController : Controller360
     {
-
+        #if xinput
         public bool invertAxis = false;
         GamePadState gamepadState;
         PlayerIndex xinputIndex;
@@ -169,6 +172,8 @@ namespace fwp.inputeer
             //Debug.Log("add xinput controller # "+index);
             return obj.AddComponent<XinputController>();
         }
+
+#endif
     }
 
 }
