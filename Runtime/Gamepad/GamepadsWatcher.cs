@@ -108,7 +108,7 @@ namespace fwp.gamepad
         {
             foreach (var c in controllers)
             {
-                if (c.playerInputSys.controller == controller)
+                if (c.playerInputSys.controllerType == controller)
                 {
                     return c;
                 }

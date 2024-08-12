@@ -13,7 +13,7 @@ namespace fwp.gamepad
     /// </summary>
     public class GamepadSubber
     {
-        InputSubs controllerSubs; // this controller subs
+        InputSubsCallbacks controllerSubs; // this controller subs
 
         public GamepadSubber(GamepadWatcher controller)
         {
@@ -25,7 +25,7 @@ namespace fwp.gamepad
 
         public bool isReady() => controllerSubs != null;
 
-        public void subTriggers(bool sub, Action<InputSysGamepad, InputTriggers, float> performed)
+        public void subTriggers(bool sub, Action<InputTriggers, float> performed)
         {
             if (sub)
             {
@@ -40,7 +40,7 @@ namespace fwp.gamepad
         /// <summary>
         /// 
         /// </summary>
-        public void subButtons(bool sub, Action<InputSysGamepad, InputButtons, bool> performed)
+        public void subButtons(bool sub, Action<InputButtons, bool> performed)
         {
             if (sub)
             {
@@ -55,7 +55,7 @@ namespace fwp.gamepad
         /// <summary>
         /// 
         /// </summary>
-        public void subDPad(bool sub, Action<InputSysGamepad, InputDPad, bool> performed)
+        public void subDPad(bool sub, Action<InputDPad, bool> performed)
         {
             if (sub)
             {
@@ -73,8 +73,8 @@ namespace fwp.gamepad
         /// release = when stick go back to neutral
         /// </summary>
         public void subJoysticks(bool sub,
-            Action<InputSysGamepad, InputJoystickSide, Vector2> performed,
-            Action<InputSysGamepad, InputJoystickSide> release = null)
+            Action<InputJoystickSide, Vector2> performed,
+            Action<InputJoystickSide> release = null)
         {
             if (sub)
             {

@@ -5,6 +5,8 @@ using UnityEngine;
 namespace fwp.gamepad
 {
     using blueprint;
+    using Mono.Cecil.Cil;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// this is a wrapper to which you give a target
@@ -17,18 +19,6 @@ namespace fwp.gamepad
         public InputSysGamepad playerInputSys; // the bridge that will sub to InputSystem (specific to each player)
 
         /// <summary>
-        /// available for kappas to sub to this controller and react
-        /// this localSubs will transfert input to iTarget (if compat)
-        /// </summary>
-        GamepadSubber localSubs;
-
-        /// <summary>
-        /// provide some bridge to react to this controller
-        /// ex : menus will sub to this to react to controller activity
-        /// </summary>
-        public GamepadSubber subber => localSubs;
-
-        /// <summary>
         /// aka listener
         /// </summary>
         ISelectable iTarget;
@@ -39,7 +29,7 @@ namespace fwp.gamepad
         /// a virtualisation of the controller state
         /// </summary>
         [SerializeField]
-        protected BlueprintXbox controllerState;
+        protected BlueprintXbox controllerState; // != null after init
 
         System.Guid _guid;
         public int guid
@@ -71,28 +61,49 @@ namespace fwp.gamepad
             }
         }
 
-        public bool isPrimary => playerInputSys.controller == InputSysGamepad.InputController.xbox_pone;
-
-        private void Awake()
-        {
-            controllerState = new BlueprintXbox();
-        }
+        public bool isPrimary => playerInputSys.controllerType == InputSysGamepad.InputController.gamepad_0;
 
         private void Start()
         {
-            // must happened after init of inputsys
-            // create a local "subs" for this player
-            localSubs = new GamepadSubber(this);
-
-            localSubs.subJoysticks(true, onJoystick, onJoystickRelease);
-            localSubs.subTriggers(true, onTrigger);
-            localSubs.subButtons(true, onButton);
-            localSubs.subDPad(true, onDPad);
-
-            Debug.Log(name + " is not setup to react to inputs");
+            if (playerInputSys != null)
+            {
+                setupCallbacks();
+            }
         }
 
-        public void feedTarget(ISelectable target)
+        void setupCallbacks()
+        {
+            // this field is serialize, this should never happen but jic
+            if(controllerState == null)
+            {
+                controllerState = new BlueprintXbox();
+            }
+            
+            
+            InputSubsCallbacks subs = playerInputSys.subs;
+            subs.onJoystickDirection += onJoyDirection;
+            subs.onJoystickPerformed += onJoystick;
+            subs.onJoystickReleased += onJoystickRelease;
+            subs.onTriggerPerformed += onTrigger;
+            subs.onButtonPerformed += onButton;
+            subs.onDPadPerformed += onDPad;
+
+            Debug.Log("watcher:ON");
+        }
+
+        public void clearCallbacks()
+        {
+            InputSubsCallbacks subs = playerInputSys.subs;
+            subs.onJoystickPerformed -= onJoystick;
+            subs.onJoystickReleased -= onJoystickRelease;
+            subs.onTriggerPerformed -= onTrigger;
+            subs.onButtonPerformed -= onButton;
+            subs.onDPadPerformed -= onDPad;
+        }
+
+        public bool hasSelection() => iTarget != null;
+
+        public void select(ISelectable target)
         {
             if (iTarget != null)
             {
@@ -129,17 +140,24 @@ namespace fwp.gamepad
             return true;
         }
 
-        private void OnDestroy()
+        void onJoyDirection(InputJoystickSide side, Vector2 value)
         {
-            localSubs.subJoysticks(false, onJoystick, onJoystickRelease);
-            localSubs.subTriggers(false, onTrigger);
-            localSubs.subButtons(false, onButton);
-            localSubs.subDPad(false, onDPad);
+            var c = iTarget as ISelectableJoyDirection;
+            if (c == null) return;
+            switch (side)
+            {
+                case InputJoystickSide.LEFT:
+                    c.onJoyLeftDir(value);
+                    break;
+                case InputJoystickSide.RIGHT:
+                    c.onJoyRightDir(value);
+                    break;
+            }
         }
 
-        public bool hasSelection() => iTarget != null;
 
-        void onTrigger(InputSysGamepad controller, InputTriggers side, float value)
+
+        void onTrigger(InputTriggers side, float value)
         {
             controllerState.mimic(side, value);
 
@@ -149,18 +167,18 @@ namespace fwp.gamepad
                 switch (side)
                 {
                     case InputTriggers.LT:
-                        trig.onTrigLeft(this, value);
+                        trig.onTrigLeft(value);
                         break;
                     case InputTriggers.RT:
-                        trig.onTrigRight(this, value);
+                        trig.onTrigRight(value);
                         break;
                 }
             }
         }
 
-        void onJoystickRelease(InputSysGamepad controller, InputJoystickSide side) => onJoystick(controller, side, Vector2.zero);
+        void onJoystickRelease(InputJoystickSide side) => onJoystick(side, Vector2.zero);
 
-        void onJoystick(InputSysGamepad controller, InputJoystickSide side, Vector2 value)
+        void onJoystick(InputJoystickSide side, Vector2 value)
         {
             controllerState.mimic(side, value);
 
@@ -176,34 +194,34 @@ namespace fwp.gamepad
                 switch (side)
                 {
                     case InputJoystickSide.LEFT:
-                        candidate.onJoyLeft(this, value);
+                        candidate.onJoyLeft(value);
                         break;
                     case InputJoystickSide.RIGHT:
-                        candidate.onJoyRight(this, value);
+                        candidate.onJoyRight(value);
                         break;
                 }
             }
         }
 
-        private void onButton(InputSysGamepad controller, InputButtons type, bool status)
+        private void onButton(InputButtons type, bool status)
         {
             controllerState?.mimic(type, status);
 
             var candidate = iTarget as ISelectableButton;
             if (candidate != null)
             {
-                candidate.onButton(this, type, status);
+                candidate.onButton(type, status);
             }
         }
 
-        private void onDPad(InputSysGamepad controller, InputDPad type, bool status)
+        private void onDPad(InputDPad type, bool status)
         {
             controllerState.mimic(type, status);
 
             var candidate = iTarget as ISelectableDpad;
             if (candidate != null)
             {
-                candidate.onDPad(this, type, status);
+                candidate.onDPad(type, status);
             }
         }
 

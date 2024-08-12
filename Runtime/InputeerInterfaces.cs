@@ -37,19 +37,29 @@ namespace fwp.gamepad
 
 	public interface ISelectableDpad
 	{
-		public bool onDPad(GamepadWatcher controller, InputDPad evt, bool status);
+		public bool onDPad(InputDPad evt, bool status);
 	}
 
-	public interface ISelectableJoy
+
+    public interface ISelectableJoyDirection
+    {
+        public void onJoyLeftDir(Vector2 value);
+        public void onJoyRightDir(Vector2 value);
+    }
+
+	/// <summary>
+	/// raw joystick signal
+	/// </summary>
+    public interface ISelectableJoy
 	{
-		public void onJoyLeft(GamepadWatcher controller, Vector2 value);
-		public void onJoyRight(GamepadWatcher controller, Vector2 value);
+		public void onJoyLeft(Vector2 value);
+		public void onJoyRight(Vector2 value);
 	}
 
 	public interface ISelectableTrigger
 	{
-		public void onTrigLeft(GamepadWatcher controller, float value);
-		public void onTrigRight(GamepadWatcher controller, float value);
+		public void onTrigLeft(float value);
+		public void onTrigRight(float value);
 	}
 
 	public interface ISelectableButton
@@ -61,7 +71,7 @@ namespace fwp.gamepad
 		/// <param name="type">Quel bouton a �t� utilis�</param>
 		/// <param name="status">true = button down, false = button up</param>
 		/// <returns>Stop event propagation</returns>
-		public bool onButton(GamepadWatcher controller, InputButtons type, bool status);
+		public bool onButton(InputButtons type, bool status);
 	}
 
 	/// <summary>
