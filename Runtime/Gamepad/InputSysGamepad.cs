@@ -100,21 +100,21 @@ namespace fwp.gamepad
 
         void feed()
         {
-            if(sysPlayerInput == null)
+            if (sysPlayerInput == null)
             {
                 sysPlayerInput = GetComponent<PlayerInput>();
             }
-            
+
             Debug.Assert(sysPlayerInput != null, "need component PlayerInput");
 
             log(sysPlayerInput.name + " feed()");
 
             var _controller = getDeviceIndex(controllerType);
-            
+
             // https://docs.unity3d.com/Packages/com.unity.inputsystem@1.1/api/UnityEngine.InputSystem.PlayerInputManager.html
             //var map = pi.actions.FindActionMap("mapping");
 
-            if (_controller == null) Debug.LogWarning("controller failed to bind");
+            if (_controller == null) Debug.LogWarning("controller <color=red>failed to bind</color> @" + controllerType);
             else
             {
                 log("controls generated");
@@ -141,14 +141,19 @@ namespace fwp.gamepad
 
         InputDevice getDeviceIndex(InputController device)
         {
+            if(device == InputController.keyboard)
+            {
+                return Keyboard.current;
+            }
+
             if (Gamepad.all.Count <= 0)
             {
+                Debug.LogWarning("no gamepad connected", this);
                 return null;
             }
 
             switch (device)
             {
-                case InputController.keyboard: return Keyboard.current;
                 case InputController.gamepad_0:
                     if (Gamepad.all.Count > 0) return Gamepad.all[0];
                     break;
@@ -157,7 +162,7 @@ namespace fwp.gamepad
                     break;
             }
 
-            Debug.LogWarning(name + " could not solve device @ " + device);
+            Debug.LogWarning("could not solve device @ " + device, this);
             //Debug.LogWarning("gamepad x" + Gamepad.all.Count);
             logDevices();
 
