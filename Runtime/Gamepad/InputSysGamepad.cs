@@ -20,7 +20,7 @@ namespace fwp.gamepad
     /// </summary>
     public class InputSysGamepad : MonoBehaviour
     {
-        static public bool verbose = false;
+        public bool verbose;
 
         const float joy_threshold = 0.5f; // magnitude
         const float joy_threshold_angle = 40f; // °
@@ -98,6 +98,37 @@ namespace fwp.gamepad
             feed();
         }
 
+        void feed()
+        {
+            if(sysPlayerInput == null)
+            {
+                sysPlayerInput = GetComponent<PlayerInput>();
+            }
+            
+            Debug.Assert(sysPlayerInput != null, "need component PlayerInput");
+
+            log(sysPlayerInput.name + " feed()");
+
+            var _controller = getDeviceIndex(controllerType);
+            
+            // https://docs.unity3d.com/Packages/com.unity.inputsystem@1.1/api/UnityEngine.InputSystem.PlayerInputManager.html
+            //var map = pi.actions.FindActionMap("mapping");
+
+            if (_controller == null) Debug.LogWarning("controller failed to bind");
+            else
+            {
+                log("controls generated");
+
+                setupJoysticks();
+
+                setupPad();
+                setupBumpers();
+                setupTriggers();
+
+                setupDpad();
+            }
+        }
+
         [ContextMenu("log devices")]
         void logDevices()
         {
@@ -131,44 +162,6 @@ namespace fwp.gamepad
             logDevices();
 
             return null;
-        }
-
-        void feed()
-        {
-            if(sysPlayerInput == null)
-            {
-                sysPlayerInput = GetComponent<PlayerInput>();
-            }
-            
-            Debug.Assert(sysPlayerInput != null, "need component PlayerInput");
-
-            log(sysPlayerInput.name + " feed()");
-
-            var _controller = getDeviceIndex(controllerType);
-            if (_controller != null)
-            {
-                //log("switching controller to : " + _controller);
-                //pi.SwitchCurrentControlScheme(_controller);
-            }
-
-            //var map = pi.actions.FindActionMap("mapping");
-            //pi.GetDevice()
-            // https://docs.unity3d.com/Packages/com.unity.inputsystem@1.1/api/UnityEngine.InputSystem.PlayerInputManager.html
-            //var map = pi.actions.FindActionMap("mapping");
-
-            if (_controller == null) Debug.LogWarning("controller failed to bind");
-            else
-            {
-                log("controls generated");
-
-                setupJoysticks();
-
-                setupPad();
-                setupBumpers();
-                setupTriggers();
-
-                setupDpad();
-            }
         }
 
         void setupBumpers()
