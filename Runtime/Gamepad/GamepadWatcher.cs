@@ -5,9 +5,7 @@ using UnityEngine;
 namespace fwp.gamepad
 {
     using blueprint;
-    using Mono.Cecil.Cil;
-    using System.Runtime.Serialization;
-
+    
     /// <summary>
     /// this is a wrapper to which you give a target
     /// and that target will receive inputs
