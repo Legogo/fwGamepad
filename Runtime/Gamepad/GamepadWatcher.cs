@@ -133,6 +133,13 @@ namespace fwp.gamepad
             onButton(InputButtons.PAD_SOUTH, false);
         }
 
+        public void queueReplace(ISelectable target)
+        {
+            targets.deselectAll();
+            targets.queueSelection(target);
+            reactQueue(target);
+        }
+
         /// <summary>
         /// par default le queue selection va cancel les inputs du previous
         /// </summary>
@@ -159,6 +166,9 @@ namespace fwp.gamepad
             targets.queueSelection(target);
         }
 
+        virtual protected void reactQueue(ISelectable target)
+        { }
+
         public void unqueueSelection(ISelectable target)
         {
             if (target == null)
@@ -169,7 +179,12 @@ namespace fwp.gamepad
 
             absorbs.unqueueSelection(target as ISelectableAbsorb);
             targets.unqueueSelection(target);
+
+            reactUnqueue(target);
         }
+
+        virtual protected void reactUnqueue(ISelectable target)
+        { }
 
         void onJoyDirection(InputJoystickSide side, Vector2 value)
         {
