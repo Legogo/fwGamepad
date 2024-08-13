@@ -41,7 +41,7 @@ namespace fwp.gamepad
 	}
 
 
-    public interface ISelectableJoyDirection
+    public interface ISelectableJoyDirection : IselectableInput
     {
         public void onJoyLeftDir(Vector2 value);
         public void onJoyRightDir(Vector2 value);
@@ -50,8 +50,8 @@ namespace fwp.gamepad
 	/// <summary>
 	/// raw joystick signal
 	/// </summary>
-    public interface ISelectableJoy
-	{
+    public interface ISelectableJoy : IselectableInput
+    {
 		public void onJoyLeft(Vector2 value);
 		public void onJoyRight(Vector2 value);
 	}
@@ -79,5 +79,8 @@ namespace fwp.gamepad
 	/// shortcut for multiple interfaces
 	/// </summary>
 	public interface ISelectableController : ISelectableJoy, ISelectableDpad, ISelectableTrigger
+	{ }
+
+	public interface IselectableInput
 	{ }
 }

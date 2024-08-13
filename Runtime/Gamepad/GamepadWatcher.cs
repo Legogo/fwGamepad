@@ -19,7 +19,8 @@ namespace fwp.gamepad
         /// <summary>
         /// aka listener
         /// </summary>
-        ISelectable iTarget;
+        WatcherInput<ISelectable> targets;
+        WatcherInput<ISelectableAbsorb> absorbs;
 
         [Header("read only")]
         /// <summary>
@@ -55,14 +56,26 @@ namespace fwp.gamepad
                 if (playerInputSys.sysDevice == null)
                     return false;
 
-                return playerInputSys.sysDevice.enabled;
+                // keyboard doesn't support enabled state
+                return true;
+                //return playerInputSys.sysDevice.enabled;
             }
+        }
+
+        [ContextMenu("check plugged ?")]
+        void cmLogPlugged()
+        {
+            Debug.Log(name + " ? " + isPlugged);
+            Debug.Log(playerInputSys.sysDevice);
         }
 
         public bool isPrimary => playerInputSys.controllerType == InputSysGamepad.InputController.gamepad_0;
 
         private void Start()
         {
+            targets = new WatcherInput<ISelectable>();
+            absorbs = new WatcherInput<ISelectableAbsorb>();
+
             if (playerInputSys != null)
             {
                 setupCallbacks();
@@ -79,8 +92,10 @@ namespace fwp.gamepad
             
             
             InputSubsCallbacks subs = playerInputSys.subs;
+            
             subs.onJoystickDirection += onJoyDirection;
             subs.onJoystickPerformed += onJoystick;
+
             subs.onJoystickReleased += onJoystickRelease;
             subs.onTriggerPerformed += onTrigger;
             subs.onButtonPerformed += onButton;
@@ -92,66 +107,100 @@ namespace fwp.gamepad
         public void clearCallbacks()
         {
             InputSubsCallbacks subs = playerInputSys.subs;
+            
+            subs.onJoystickDirection -= onJoyDirection;
             subs.onJoystickPerformed -= onJoystick;
+
             subs.onJoystickReleased -= onJoystickRelease;
             subs.onTriggerPerformed -= onTrigger;
             subs.onButtonPerformed -= onButton;
             subs.onDPadPerformed -= onDPad;
         }
 
-        public bool hasSelection() => iTarget != null;
+        public bool hasSelection() => targets.hasSomething();
 
-        public void select(ISelectable target)
+        /// <summary>
+        /// force all selected element to reset inputs
+        /// 
+        /// force tiny to reset joystick state (ie : when input block starts)
+        /// </summary>
+        public void bubbleNeutral()
         {
-            if (iTarget != null)
-            {
-                releaseTarget(target);
-            }
+            // force a neutral (for motion)
+            onJoystickRelease(InputJoystickSide.LEFT);
 
-            iTarget = target;
-
-            GamepadVerbosity.sLog(name + " <b>HAS</b> control   : " + iTarget, iTarget as Object);
-
-            iTarget.onSelected();
+            // force a release
+            onButton(InputButtons.PAD_SOUTH, false);
         }
 
         /// <summary>
-        /// true : actually released it
+        /// par default le queue selection va cancel les inputs du previous
         /// </summary>
-        public bool releaseTarget(ISelectable target)
+        public void queueSelection(ISelectable target, bool forceInputRelease = true)
         {
-            // not concerned
-            if (target != iTarget)
+            if (target == null)
             {
-                return false;
+                Debug.LogError("don't use queue for clearing, use deselect");
+                return;
             }
 
-            if (iTarget == null)
-                return false;
+            if (forceInputRelease)
+            {
+                bubbleNeutral();
+            }
 
-            iTarget.onUnselected();
+            ISelectableAbsorb absorb = target as ISelectableAbsorb;
+            if (absorb != null)
+            {
+                absorbs.queueSelection(target as ISelectableAbsorb);
+                return;
+            }
 
-            GamepadVerbosity.sLog(name + " <b>LOSE</b> control  : <b>" + iTarget + "</b>", iTarget as Object);
+            targets.queueSelection(target);
+        }
 
-            iTarget = null;
+        public void unqueueSelection(ISelectable target)
+        {
+            if (target == null)
+            {
+                Debug.LogWarning("nothing given to unqeue ??");
+                return;
+            }
 
-            return true;
+            absorbs.unqueueSelection(target as ISelectableAbsorb);
+            targets.unqueueSelection(target);
         }
 
         void onJoyDirection(InputJoystickSide side, Vector2 value)
         {
-            var c = iTarget as ISelectableJoyDirection;
-            if (c == null) return;
-            switch (side)
+            controllerState.mimic(side, value);
+
+            if (absorbs.onJoystick(side, value))
             {
-                case InputJoystickSide.LEFT:
-                    c.onJoyLeftDir(value);
-                    break;
-                case InputJoystickSide.RIGHT:
-                    c.onJoyRightDir(value);
-                    break;
+                return;
             }
+
+            targets.onJoystick(side, value);
         }
+
+
+        void onJoystickRelease(InputJoystickSide side)
+        {
+            onJoystick(side, Vector2.zero);
+        }
+
+        void onJoystick(InputJoystickSide side, Vector2 value)
+        {
+            controllerState.mimic(side, value);
+
+            if (absorbs.onJoystick(side, value))
+            {
+                return;
+            }
+
+            targets.onJoystick(side, value);
+        }
+
 
 
 
@@ -159,69 +208,47 @@ namespace fwp.gamepad
         {
             controllerState.mimic(side, value);
 
-            var trig = iTarget as ISelectableTrigger;
-            if (trig != null)
+            if (absorbs.onTrigger(side, value))
             {
-                switch (side)
-                {
-                    case InputTriggers.LT:
-                        trig.onTrigLeft(value);
-                        break;
-                    case InputTriggers.RT:
-                        trig.onTrigRight(value);
-                        break;
-                }
+                return;
             }
-        }
 
-        void onJoystickRelease(InputJoystickSide side) => onJoystick(side, Vector2.zero);
-
-        void onJoystick(InputJoystickSide side, Vector2 value)
-        {
-            controllerState.mimic(side, value);
-
-            //Debug.Log(side + " = " + value, this);
-
-            var candidate = iTarget as ISelectableJoy;
-
-            //Debug.Log(iTarget);
-            //Debug.Log(candidate);
-
-            if (candidate != null)
-            {
-                switch (side)
-                {
-                    case InputJoystickSide.LEFT:
-                        candidate.onJoyLeft(value);
-                        break;
-                    case InputJoystickSide.RIGHT:
-                        candidate.onJoyRight(value);
-                        break;
-                }
-            }
+            targets.onTrigger(side, value);
         }
 
         private void onButton(InputButtons type, bool status)
         {
-            controllerState?.mimic(type, status);
+            //CHECK IF MENU OPENED !
+            //..TODO..
 
-            var candidate = iTarget as ISelectableButton;
-            if (candidate != null)
+            controllerState.mimic(type, status);
+
+            if (absorbs.onButton(type, status))
             {
-                candidate.onButton(type, status);
+                return;
             }
+
+            targets.onButton(type, status);
         }
 
         private void onDPad(InputDPad type, bool status)
         {
             controllerState.mimic(type, status);
 
-            var candidate = iTarget as ISelectableDpad;
-            if (candidate != null)
+            if (absorbs.onDPad(type, status))
             {
-                candidate.onDPad(type, status);
+                return;
             }
+
+            targets.onDPad(type, status);
         }
 
+        [ContextMenu("log")]
+        void cmLog()
+        {
+            Debug.Log(name, this);
+            if (targets != null) Debug.Log(targets.stringify());
+            if (absorbs != null) Debug.Log(absorbs.stringify());
+        }
     }
 }

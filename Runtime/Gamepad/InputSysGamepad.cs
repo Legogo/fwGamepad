@@ -93,11 +93,6 @@ namespace fwp.gamepad
 
             log("created subs");
 
-            feed();
-        }
-
-        void feed()
-        {
             if (sysPlayerInput == null)
             {
                 sysPlayerInput = GetComponent<PlayerInput>();
@@ -107,12 +102,12 @@ namespace fwp.gamepad
 
             log(sysPlayerInput.name + " feed()");
 
-            var _controller = getDeviceIndex(controllerType);
+            sysDevice = getDeviceIndex(controllerType);
 
             // https://docs.unity3d.com/Packages/com.unity.inputsystem@1.1/api/UnityEngine.InputSystem.PlayerInputManager.html
             //var map = pi.actions.FindActionMap("mapping");
 
-            if (_controller == null) Debug.LogWarning("controller <color=red>failed to bind</color> @" + controllerType);
+            if (sysDevice == null) Debug.LogWarning("controller <color=red>failed to bind</color> @" + controllerType);
             else
             {
                 log("controls generated");
@@ -124,6 +119,8 @@ namespace fwp.gamepad
                 setupTriggers();
 
                 setupDpad();
+
+                //sysDevice.enabled = true;
             }
         }
 
@@ -146,7 +143,7 @@ namespace fwp.gamepad
 
             if (Gamepad.all.Count <= 0)
             {
-                Debug.LogWarning("no gamepad connected", this);
+                Debug.LogWarning(name+" no gamepad connected", this);
                 return null;
             }
 
@@ -273,7 +270,7 @@ namespace fwp.gamepad
 
                 // RAW
 
-                log("motion ? " + joyLeft.x + " x " + joyLeft.y + " , " + joyLeft.sqrMagnitude);
+                log("RAW motion ? " + joyLeft.x + " x " + joyLeft.y + " , " + joyLeft.sqrMagnitude);
 
                 //Debug.Assert(InputSubber.subs != null, "no sub ?");
                 subs.onJoystickPerformed?.Invoke(InputJoystickSide.LEFT, joyLeft);
@@ -283,7 +280,7 @@ namespace fwp.gamepad
             {
                 Vector2 joyLeft = ctx.ReadValue<Vector2>();
 
-                log("motion stopped");
+                log("RAW motion stopped");
 
                 subs.onJoystickReleased?.Invoke(InputJoystickSide.LEFT);
             };
@@ -294,7 +291,7 @@ namespace fwp.gamepad
             {
                 Vector2 joyRight = ctx.ReadValue<Vector2>();
 
-                log("motion ? " + joyRight.x + " x " + joyRight.y + " , " + joyRight.sqrMagnitude);
+                log("RAW motion ? " + joyRight.x + " x " + joyRight.y + " , " + joyRight.sqrMagnitude);
 
                 subs.onJoystickPerformed?.Invoke(InputJoystickSide.RIGHT, joyRight);
             };
@@ -303,7 +300,7 @@ namespace fwp.gamepad
             {
                 Vector2 joyRight = ctx.ReadValue<Vector2>();
 
-                log("motion stopped");
+                log("RAW motion stopped");
 
                 subs.onJoystickReleased?.Invoke(InputJoystickSide.RIGHT);
             };
