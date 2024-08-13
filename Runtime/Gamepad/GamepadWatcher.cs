@@ -86,7 +86,7 @@ namespace fwp.gamepad
             subs.onButtonPerformed += onButton;
             subs.onDPadPerformed += onDPad;
 
-            Debug.Log("watcher:ON");
+            //Debug.Log("watcher:ON");
         }
 
         public void clearCallbacks()
@@ -110,7 +110,7 @@ namespace fwp.gamepad
 
             iTarget = target;
 
-            Debug.Log(name + " <b>HAS</b> control   : " + iTarget, iTarget as Object);
+            GamepadVerbosity.sLog(name + " <b>HAS</b> control   : " + iTarget, iTarget as Object);
 
             iTarget.onSelected();
         }
@@ -131,7 +131,7 @@ namespace fwp.gamepad
 
             iTarget.onUnselected();
 
-            Debug.Log(name + " <b>LOSE</b> control  : <b>" + iTarget + "</b>", iTarget as Object);
+            GamepadVerbosity.sLog(name + " <b>LOSE</b> control  : <b>" + iTarget + "</b>", iTarget as Object);
 
             iTarget = null;
 

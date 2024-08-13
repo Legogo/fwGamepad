@@ -81,7 +81,7 @@ namespace fwp.gamepad
                 }
             }
 
-            Debug.Log(name + " has fetched x" + controllers.Count + " controllers");
+            GamepadVerbosity.sLog(name + " has fetched x" + controllers.Count + " controllers", this);
         }
 
         public int countPlugged()

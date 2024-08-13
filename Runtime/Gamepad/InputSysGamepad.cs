@@ -20,8 +20,6 @@ namespace fwp.gamepad
     /// </summary>
     public class InputSysGamepad : MonoBehaviour
     {
-        public bool verbose;
-
         const float joy_threshold = 0.5f; // magnitude
         const float joy_threshold_angle = 40f; // °
 
@@ -312,13 +310,7 @@ namespace fwp.gamepad
 
         }
 
-        void log(string content)
-        {
-            if (!verbose)
-                return;
-
-            Debug.Log(GetType() + "&" + name + " >>> " + content, this);
-        }
+        void log(string content) => GamepadVerbosity.sLog(GetType() + "&" + name + " >>> " + content, this);
 
         /// <summary>
         /// [X,Y] normalized ?
