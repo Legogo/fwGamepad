@@ -71,7 +71,7 @@ namespace fwp.gamepad
 
         public bool isPrimary => playerInputSys.controllerType == InputSysGamepad.InputController.gamepad_0;
 
-        private void Start()
+        void Start()
         {
             targets = new WatcherInput<ISelectable>();
             absorbs = new WatcherInput<ISelectableAbsorb>();
@@ -80,7 +80,12 @@ namespace fwp.gamepad
             {
                 setupCallbacks();
             }
+
+            setup();
         }
+
+        virtual protected void setup()
+        { }
 
         void setupCallbacks()
         {
