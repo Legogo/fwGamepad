@@ -71,7 +71,14 @@ namespace fwp.gamepad
 
         public bool isPrimary => playerInputSys.controllerType == InputSysGamepad.InputController.gamepad_0;
 
-        void Start()
+        private void Awake()
+        {
+            create();
+        }
+
+        virtual protected void create() { }
+
+        private void Start()
         {
             targets = new WatcherInput<ISelectable>();
             absorbs = new WatcherInput<ISelectableAbsorb>();

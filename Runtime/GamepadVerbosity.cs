@@ -46,16 +46,16 @@ static public class GamepadVerbosity
     }
 
 #if UNITY_EDITOR
-    [UnityEditor.MenuItem("Window/" + _id + "/verbosity:check")]
+    [UnityEditor.MenuItem("Window/" + _id + "/verbosity:    check")]
     static void miScreensVerboseCheck() => Debug.Log(_int_verbose + ":" + verboseLevel + "?" + verbose);
 
-    [UnityEditor.MenuItem("Window/" + _id + "/verbosity:off")]
+    [UnityEditor.MenuItem("Window/" + _id + "/verbosity:    off")]
     static void miScreensVerboseNone() => verboseLevel = VerbosityLevel.none;
 
-    [UnityEditor.MenuItem("Window/" + _id + "/verbosity:events")]
+    [UnityEditor.MenuItem("Window/" + _id + "/verbosity:    events")]
     static void miScreensVerboseEvents() => verboseLevel = VerbosityLevel.events;
 
-    [UnityEditor.MenuItem("Window/" + _id + "/verbosity:deep")]
+    [UnityEditor.MenuItem("Window/" + _id + "/verbosity:    deep")]
     static void miScreensVerboseDeep() => verboseLevel = VerbosityLevel.deep;
 #endif
 
