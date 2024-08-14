@@ -127,34 +127,38 @@ namespace fwp.gamepad
         [ContextMenu("log devices")]
         void logDevices()
         {
-            Debug.Log("x" + InputSystem.devices.Count);
+            Debug.Log("devices x" + InputSystem.devices.Count);
             for (int i = 0; i < InputSystem.devices.Count; i++)
             {
-                Debug.Log(InputSystem.devices[i]);
+                Debug.Log($"#{i} {InputSystem.devices[i]}");
             }
         }
 
         InputDevice getDeviceIndex(InputController device)
         {
-            if(device == InputController.keyboard)
-            {
-                return Keyboard.current;
-            }
 
             if (Gamepad.all.Count <= 0)
             {
-                Debug.LogWarning(name+" no gamepad connected", this);
-                return null;
+                Debug.LogWarning(name + " no gamepad connected", this);
             }
 
             switch (device)
             {
                 case InputController.gamepad_0:
                     if (Gamepad.all.Count > 0) return Gamepad.all[0];
+
+                    device = InputController.keyboard;
+                    Debug.LogWarning("no gamepad for #0 : using keyboard instead");
+
                     break;
                 case InputController.gamepad_1:
                     if (Gamepad.all.Count > 1) return Gamepad.all[1];
                     break;
+            }
+
+            if (device == InputController.keyboard)
+            {
+                return Keyboard.current;
             }
 
             Debug.LogWarning("could not solve device @ " + device, this);
