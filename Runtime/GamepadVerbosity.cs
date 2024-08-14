@@ -33,15 +33,16 @@ static public class GamepadVerbosity
         {
 #if UNITY_EDITOR
             return (VerbosityLevel)UnityEditor.EditorPrefs.GetInt(_int_verbose, 0);
+#else
+            return VerbosityLevel.none;
 #endif
         }
         set
         {
 #if UNITY_EDITOR
-                UnityEditor.EditorPrefs.SetInt(_int_verbose, (int)value);
-#endif
-
+            UnityEditor.EditorPrefs.SetInt(_int_verbose, (int)value);
             Debug.LogWarning(_int_verbose + " : verbosity : " + verboseLevel);
+#endif
         }
     }
 
