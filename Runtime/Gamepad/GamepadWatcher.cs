@@ -22,13 +22,7 @@ namespace fwp.gamepad
         WatcherInput<ISelectable> targets;
         WatcherInput<ISelectableAbsorb> absorbs;
 
-        [Header("read only")]
-        /// <summary>
-        /// READ ONLY
-        /// a virtualisation of the controller state
-        /// </summary>
-        [SerializeField]
-        protected BlueprintXbox controllerState; // != null after init
+        public BlueprintXbox controllerState; // != null after init
 
         System.Guid _guid;
         public int guid
