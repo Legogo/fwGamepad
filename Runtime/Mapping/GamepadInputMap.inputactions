@@ -656,7 +656,7 @@
                     "name": "pause",
                     "type": "Button",
                     "id": "b361e333-5616-42c2-916a-74a8568dc175",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
