@@ -196,12 +196,12 @@ namespace fwp.gamepad
         {
             controllerState.mimic(side, value);
 
-            if (absorbs.onJoystick(side, value))
+            if (absorbs.onJoystickDirection(side, value))
             {
                 return;
             }
 
-            targets.onJoystick(side, value);
+            targets.onJoystickDirection(side, value);
         }
 
 

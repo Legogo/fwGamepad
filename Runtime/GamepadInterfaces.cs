@@ -40,7 +40,6 @@ namespace fwp.gamepad
 		public bool onDPad(InputDPad evt, bool status);
 	}
 
-
     public interface ISelectableJoyDirection : IselectableInput
     {
         public void onJoyLeftDir(Vector2 value);

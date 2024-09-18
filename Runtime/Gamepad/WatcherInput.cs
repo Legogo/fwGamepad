@@ -116,6 +116,32 @@ public class WatcherInput<SelectorType> where SelectorType : ISelectable
         return false;
     }
 
+    public bool onJoystickDirection(InputJoystickSide side, Vector2 value)
+    {
+
+        for (int i = queue.Count - 1; i >= 0; i--)
+        {
+            ISelectableJoyDirection elmt = queue[i] as ISelectableJoyDirection;
+            if (elmt != null)
+            {
+                switch (side)
+                {
+                    case InputJoystickSide.LEFT:
+                        elmt.onJoyLeftDir(value);
+                        break;
+                    case InputJoystickSide.RIGHT:
+                        elmt.onJoyRightDir(value);
+                        break;
+                }
+            }
+
+            ISelectableAbsorb abs = queue[i] as ISelectableAbsorb;
+            if (abs != null && abs.isAbsorb()) return true;
+        }
+
+        return false;
+    }
+
     public bool onJoystick(InputJoystickSide side, Vector2 value)
     {
 
@@ -141,6 +167,7 @@ public class WatcherInput<SelectorType> where SelectorType : ISelectable
 
         return false;
     }
+
     public bool onTrigger(InputTriggers side, float value)
     {
 
