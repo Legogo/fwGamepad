@@ -263,10 +263,11 @@ namespace fwp.gamepad
                 //float angle = Vector2.SignedAngle(joyLeft, Vector2.up);
 
                 Vector2 direction = get6D(_joy);
-                if (direction.x != joyLeftDir.x || direction.y != joyLeftDir.y)
+                if (direction.x != joyLeftDir.x || direction.y != joyLeftDir.y) // any changes ?
                 {
+                    log("DIR motion ? " + direction);
                     subs.onJoystickDirection?.Invoke(InputJoystickSide.LEFT, direction);
-                    joyLeftDir = direction;
+                    joyLeftDir = direction; // buff
                 }
 
                 joyLeft = _joy;
@@ -282,9 +283,13 @@ namespace fwp.gamepad
 
             action(MappingActions.joyLeft).canceled += (InputAction.CallbackContext ctx) =>
             {
-                Vector2 joyLeft = ctx.ReadValue<Vector2>();
+                //Vector2 _joy = ctx.ReadValue<Vector2>();
 
                 log("RAW motion stopped");
+
+                // reset buffs
+                joyLeft = Vector2.zero;
+                joyLeftDir = Vector2.zero;
 
                 subs.onJoystickReleased?.Invoke(InputJoystickSide.LEFT);
             };
