@@ -272,7 +272,6 @@ namespace fwp.gamepad
 
                 joyLeft = _joy;
 
-
                 // RAW
 
                 log("RAW motion ? " + joyLeft.x + " x " + joyLeft.y + " , " + joyLeft.sqrMagnitude);

@@ -208,6 +208,7 @@ namespace fwp.gamepad
         void onJoystickRelease(InputJoystickSide side)
         {
             onJoystick(side, Vector2.zero);
+            onJoyDirection(side, Vector2.zero);
         }
 
         void onJoystick(InputJoystickSide side, Vector2 value)
