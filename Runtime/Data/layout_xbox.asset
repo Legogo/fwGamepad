@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e3e9fa6f2bf2774abadd35f5588731f, type: 3}
+  m_Name: layout_xbox
+  m_EditorClassIdentifier: 
+  joysticks: []
+  actions: []
+  dpads: []
+  joystickLeft:
+    icon: {fileID: 0}
+  joystickRight:
+    icon: {fileID: 0}
+  action_N:
+    icon: {fileID: 0}
+  action_E:
+    icon: {fileID: 0}
+  action_S:
+    icon: {fileID: 0}
+  action_W:
+    icon: {fileID: 0}
+  action_START:
+    icon: {fileID: 0}
+  action_SELECT:
+    icon: {fileID: 0}
+  dpad_N:
+    icon: {fileID: 0}
+  dpad_E:
+    icon: {fileID: 0}
+  dpad_S:
+    icon: {fileID: 0}
+  dpad_W:
+    icon: {fileID: 0}

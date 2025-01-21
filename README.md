@@ -30,3 +30,30 @@ Watcher will "select" the object and call interface method when controller is pe
     - GamepadWatcher (selector : manage what object to send input to)
 
 2. create an avatar and attach a script that own needed ISelectable + ISelectable(input) interfaces
+
+# Gamepad nomenclature
+
+Directional (dpad)
+Action (XYBA)
+Stick/Joystick Left/Right
+Stick press     Pressing the joystick   R3/L3
+
+Select/Start
+    (PS) create/options
+    (XBOX) view/menu
+    (Nin) - / +
+
+# Culture
+
+https://www.techspot.com/article/2182-anatomy-gamepad/
+https://infinitalab.medium.com/anatomy-of-a-gamepad-design-materials-assembly-and-the-future-8e5e7d54aae8
+
+# Constructor diagram
+
+PS      : https://controller.dl.playstation.net/controller/lang/en/2100002.html
+Xbox    : https://support.xbox.com/en-US/help/hardware-network/controller/get-to-know-elite-series-2
+Switch  : https://www.nintendo.com/en-gb/Support/Nintendo-Switch/Joy-Con-Controller-Diagram-1518877.html
+
+# Medias
+
+Credits to : https://assetstore.unity.com/packages/2d/gui/icons/ux-flat-icons-free-202525?srsltid=AfmBOoo5wUfYFZGeRH8nGiMVuUBL6-vFhdm8tAn15FQTdxipddc6wz9g
