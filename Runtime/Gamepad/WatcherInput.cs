@@ -124,8 +124,12 @@ public class WatcherInput<SelectorType> where SelectorType : ISelectable
         return false;
     }
 
+    /// <summary>
+    /// true : consumed OR absorbed
+    /// </summary>
     public bool onJoystickDirection(InputJoystickSide side, Vector2 value)
     {
+        log("onJoystickDirection." + side + " = " + value);
 
         for (int i = queue.Count - 1; i >= 0; i--)
         {

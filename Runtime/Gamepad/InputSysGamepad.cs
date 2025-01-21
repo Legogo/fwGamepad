@@ -26,8 +26,8 @@ namespace fwp.gamepad
         Vector2 joyLeft;
         Vector2 joyLeftDir;
 
-        // TODO
         Vector2 joyRight;
+        Vector2 joyRightDir;
 
         /// <summary>
         /// when InputSystem triggers it will activates the callbacks
@@ -251,39 +251,25 @@ namespace fwp.gamepad
 
             action(MappingActions.joyLeft).performed += (InputAction.CallbackContext ctx) =>
             {
-                // read from inptu system
                 Vector2 _joy = ctx.ReadValue<Vector2>();
-
-                // DIRECTION
-
-                //      0
-                //  -90   90
-                //     180
-                //float _angle = Vector2.SignedAngle(_joy, Vector2.up);
-                //float angle = Vector2.SignedAngle(joyLeft, Vector2.up);
 
                 Vector2 direction = get6D(_joy);
                 if (direction.x != joyLeftDir.x || direction.y != joyLeftDir.y) // any changes ?
                 {
-                    log("DIR motion ? " + direction);
+                    log("LS.DIR motion ? " + direction);
                     subs.onJoystickDirection?.Invoke(InputJoystickSide.LEFT, direction);
                     joyLeftDir = direction; // buff
                 }
 
                 joyLeft = _joy;
 
-                // RAW
-
                 log("RAW motion ? " + joyLeft.x + " x " + joyLeft.y + " , " + joyLeft.sqrMagnitude);
 
-                //Debug.Assert(InputSubber.subs != null, "no sub ?");
                 subs.onJoystickPerformed?.Invoke(InputJoystickSide.LEFT, joyLeft);
             };
 
             action(MappingActions.joyLeft).canceled += (InputAction.CallbackContext ctx) =>
             {
-                //Vector2 _joy = ctx.ReadValue<Vector2>();
-
                 log("RAW motion stopped");
 
                 // reset buffs
@@ -297,7 +283,17 @@ namespace fwp.gamepad
 
             action(MappingActions.joyRight).performed += (InputAction.CallbackContext ctx) =>
             {
-                Vector2 joyRight = ctx.ReadValue<Vector2>();
+                Vector2 _joy = ctx.ReadValue<Vector2>();
+
+                Vector2 direction = get6D(_joy);
+                if (direction.x != joyRightDir.x || direction.y != joyRightDir.y) // any changes ?
+                {
+                    log("RS.DIR motion ? " + direction);
+                    subs.onJoystickDirection?.Invoke(InputJoystickSide.RIGHT, direction);
+                    joyRightDir = direction; // buff
+                }
+
+                joyRight = _joy;
 
                 log("RAW motion ? " + joyRight.x + " x " + joyRight.y + " , " + joyRight.sqrMagnitude);
 
@@ -319,6 +315,11 @@ namespace fwp.gamepad
 
         /// <summary>
         /// [X,Y] normalized ?
+        /// 
+        /// DIRECTION
+        ///      0
+        ///  -90   90
+        ///     180
         /// </summary>
         static public Vector2 get6D(Vector2 joyRaw, float deadZone = 0.5f, bool verbose = false)
         {

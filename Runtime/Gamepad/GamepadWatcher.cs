@@ -5,7 +5,7 @@ using UnityEngine;
 namespace fwp.gamepad
 {
     using blueprint;
-    
+
     /// <summary>
     /// this is a wrapper to which you give a target
     /// and that target will receive inputs
@@ -19,8 +19,8 @@ namespace fwp.gamepad
         /// <summary>
         /// aka listener
         /// </summary>
-        WatcherInput<ISelectable> targets;
-        WatcherInput<ISelectableAbsorb> absorbs;
+        WatcherInput<ISelectable> targets; // normal object
+        WatcherInput<ISelectableAbsorb> absorbs; // object that can absorb
 
         public BlueprintXbox controllerState; // != null after init
 
@@ -91,14 +91,13 @@ namespace fwp.gamepad
         void setupCallbacks()
         {
             // this field is serialize, this should never happen but jic
-            if(controllerState == null)
+            if (controllerState == null)
             {
                 controllerState = new BlueprintXbox();
             }
-            
-            
+
             InputSubsCallbacks subs = playerInputSys.subs;
-            
+
             subs.onJoystickDirection += onJoyDirection;
             subs.onJoystickPerformed += onJoystick;
 
@@ -113,7 +112,7 @@ namespace fwp.gamepad
         public void clearCallbacks()
         {
             InputSubsCallbacks subs = playerInputSys.subs;
-            
+
             subs.onJoystickDirection -= onJoyDirection;
             subs.onJoystickPerformed -= onJoystick;
 
@@ -161,14 +160,21 @@ namespace fwp.gamepad
                 bubbleNeutral();
             }
 
-            ISelectableAbsorb absorb = target as ISelectableAbsorb;
-            if (absorb != null)
+            if(target is ISelectableAbsorb)
             {
-                absorbs.queueSelection(target as ISelectableAbsorb);
-                return;
+                if(absorbs.queueSelection(target as ISelectableAbsorb))
+                {
+                    reactQueue(target);
+                }
+            }
+            else
+            {
+                if (targets.queueSelection(target))
+                {
+                    reactQueue(target);
+                }
             }
 
-            if (targets.queueSelection(target)) reactQueue(target);
         }
 
         virtual protected void reactQueue(ISelectable target)
@@ -182,8 +188,20 @@ namespace fwp.gamepad
                 return;
             }
 
-            absorbs.unqueueSelection(target as ISelectableAbsorb);
-            if(targets.unqueueSelection(target)) reactUnqueue(target);
+            if(target is ISelectableAbsorb)
+            {
+                if (absorbs.unqueueSelection(target as ISelectableAbsorb))
+                {
+                    reactUnqueue(target);
+                }
+            }
+            else
+            {
+                if (targets.unqueueSelection(target))
+                {
+                    reactUnqueue(target);
+                }
+            }
         }
 
         /// <summary>
@@ -192,23 +210,10 @@ namespace fwp.gamepad
         virtual protected void reactUnqueue(ISelectable target)
         { }
 
-        void onJoyDirection(InputJoystickSide side, Vector2 value)
-        {
-            controllerState.mimic(side, value);
-
-            if (absorbs.onJoystickDirection(side, value))
-            {
-                return;
-            }
-
-            targets.onJoystickDirection(side, value);
-        }
-
-
         void onJoystickRelease(InputJoystickSide side)
         {
             onJoystick(side, Vector2.zero);
-            onJoyDirection(side, Vector2.zero);
+            onJoyDirection(side, Vector2.zero); // joy release
         }
 
         void onJoystick(InputJoystickSide side, Vector2 value)
@@ -223,8 +228,17 @@ namespace fwp.gamepad
             targets.onJoystick(side, value);
         }
 
+        void onJoyDirection(InputJoystickSide side, Vector2 value)
+        {
+            controllerState.mimic(side, value);
 
+            if (absorbs.onJoystickDirection(side, value))
+            {
+                return;
+            }
 
+            targets.onJoystickDirection(side, value);
+        }
 
         void onTrigger(InputTriggers side, float value)
         {
@@ -240,9 +254,6 @@ namespace fwp.gamepad
 
         private void onButton(InputButtons type, bool status)
         {
-            //CHECK IF MENU OPENED !
-            //..TODO..
-
             controllerState.mimic(type, status);
 
             if (absorbs.onButton(type, status))
