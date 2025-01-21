@@ -142,8 +142,7 @@ namespace fwp.gamepad
         public void queueReplace(ISelectable target)
         {
             targets.deselectAll();
-            targets.queueSelection(target);
-            reactQueue(target);
+            queueSelection(target);
         }
 
         /// <summary>
@@ -169,7 +168,7 @@ namespace fwp.gamepad
                 return;
             }
 
-            targets.queueSelection(target);
+            if (targets.queueSelection(target)) reactQueue(target);
         }
 
         virtual protected void reactQueue(ISelectable target)
@@ -184,11 +183,12 @@ namespace fwp.gamepad
             }
 
             absorbs.unqueueSelection(target as ISelectableAbsorb);
-            targets.unqueueSelection(target);
-
-            reactUnqueue(target);
+            if(targets.unqueueSelection(target)) reactUnqueue(target);
         }
 
+        /// <summary>
+        /// from targets[]
+        /// </summary>
         virtual protected void reactUnqueue(ISelectable target)
         { }
 

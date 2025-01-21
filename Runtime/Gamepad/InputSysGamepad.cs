@@ -148,7 +148,7 @@ namespace fwp.gamepad
                     if (Gamepad.all.Count > 0) return Gamepad.all[0];
 
                     device = InputController.keyboard;
-                    Debug.LogWarning("no gamepad for #0 : using keyboard instead");
+                    Debug.LogWarning("no gamepad for #0 : <color=orange>using keyboard instead</color>");
 
                     break;
                 case InputController.gamepad_1:

@@ -33,33 +33,41 @@ public class WatcherInput<SelectorType> where SelectorType : ISelectable
         return queue[queue.Count - 1];
     }
 
-    public void queueSelection(SelectorType target)
+    /// <summary>
+    /// true : success
+    /// false : can't, already in list
+    /// </summary>
+    public bool queueSelection(SelectorType target)
     {
-        if (target == null) return;
+        if (target == null) return false;
+
+        if (queue.Contains(target)) return false;
+
+        queue.Add(target);
+
+        target.onSelected();
+
+        log($"queue:{target}  ↑{queue.Count}", target);
+
+        // ↓{_unqueue.Count}
+        return true;
+    }
+
+    public bool unqueueSelection(SelectorType target)
+    {
+        if (target == null) return false;
 
         if (!queue.Contains(target))
         {
-            queue.Add(target);
-
-            target.onSelected();
-
-            log($"queue:{target}  ↑{queue.Count}", target);
-            // ↓{_unqueue.Count}
+            Debug.LogWarning(" ? selector queue doesn't contains " + target);
+            return false;
         }
-    }
 
-    public void unqueueSelection(SelectorType target)
-    {
-        if (target == null) return;
+        queue.Remove(target);
+        target.onUnselected();
 
-        if (!queue.Contains(target)) Debug.LogWarning(" ? selector queue doesn't contains " + target);
-        else
-        {
-            queue.Remove(target);
-            target.onUnselected();
-
-            log($"un-queue:{target}  ↓{queue.Count}", target);
-        }
+        log($"un-queue:{target}  ↓{queue.Count}", target);
+        return true;
     }
 
     public T extractFromQueue<T>() where T : class, ISelectable
