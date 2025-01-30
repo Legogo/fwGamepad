@@ -4,6 +4,12 @@ using UnityEngine;
 
 using fwp.gamepad;
 
+/// <summary>
+/// paradigm where the watcher will manage a list of "selectable" object (using interface)
+/// and transfert the input to that selection
+/// + multiselection is possible
+/// + selection that consume the input event (absorb)
+/// </summary>
 public class WatcherInput<SelectorType> where SelectorType : ISelectable
 {
     public List<SelectorType> queue = new List<SelectorType>();

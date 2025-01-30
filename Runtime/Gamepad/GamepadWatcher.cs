@@ -230,7 +230,7 @@ namespace fwp.gamepad
 
         void onJoyDirection(InputJoystickSide side, Vector2 value)
         {
-            controllerState.mimic(side, value);
+            controllerState.mimicDirection(side, value);
 
             if (absorbs.onJoystickDirection(side, value))
             {
