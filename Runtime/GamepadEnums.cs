@@ -16,7 +16,7 @@
         NONE,
         PAD_NORTH, PAD_EAST, PAD_SOUTH, PAD_WEST, // actions
         START, RETURN,
-        BL, BR // bumper (top)
+        BL, BR // bumper aka shoulder (top)
     }
 
     /// <summary>

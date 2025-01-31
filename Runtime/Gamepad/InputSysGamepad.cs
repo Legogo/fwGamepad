@@ -18,6 +18,11 @@ namespace fwp.gamepad
     /// 
     /// this is where InputSubs is sub to InputSystem
     /// any external object can use the ref of the subs to sub to it
+    /// 
+    /// # unity.documentation
+    /// 
+    /// https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/Layouts.html
+    /// 
     /// </summary>
     public class InputSysGamepad : MonoBehaviour
     {
@@ -81,6 +86,7 @@ namespace fwp.gamepad
         public InputDevice sysDevice;
         public PlayerInput sysPlayerInput; // unity.PlayerInput > link with unity InputSystem
 
+
         private void Awake()
         {
             subs = new InputSubsCallbacks();
@@ -106,7 +112,7 @@ namespace fwp.gamepad
             {
                 log("controls generated");
 
-                controller = new blueprint.BlueprintXbox();
+                controller = new blueprint.BlueprintXbox(subs);
 
                 setupJoysticks();
 
@@ -175,26 +181,22 @@ namespace fwp.gamepad
 
             action(MappingActions.bumperL).performed += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.BL, true);
-                subs.onButtonPerformed?.Invoke(InputButtons.BL, true);
+                controller.inject(InputButtons.BL, true);
             };
 
             action(MappingActions.bumperL).canceled += (InputAction.CallbackContext ctx) =>
             {
-                subs.onButtonPerformed?.Invoke(InputButtons.BL, false);
-                controller.mimic(InputButtons.BL, false);
+                controller.inject(InputButtons.BL, false);
             };
 
             action(MappingActions.bumperR).performed += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.BR, true);
-                subs.onButtonPerformed?.Invoke(InputButtons.BR, true);
+                controller.inject(InputButtons.BR, true);
             };
 
             action(MappingActions.bumperR).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.BR, false);
-                subs.onButtonPerformed?.Invoke(InputButtons.BR, false);
+                controller.inject(InputButtons.BR, false);
             };
 
         }
@@ -207,26 +209,22 @@ namespace fwp.gamepad
             action(MappingActions.triggerL).performed += (InputAction.CallbackContext ctx) =>
             {
                 float val = ctx.ReadValue<float>();
-                controller.mimic(InputTriggers.LT, val);
-                subs.onTriggerPerformed?.Invoke(InputTriggers.LT, val);
+                controller.inject(InputTriggers.LT, val);
             };
 
             action(MappingActions.triggerL).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputTriggers.LT, 0f);
-                subs.onTriggerPerformed?.Invoke(InputTriggers.LT, 0f);
+                controller.inject(InputTriggers.LT, 0f);
             };
 
             action(MappingActions.triggerR).performed += (InputAction.CallbackContext ctx) =>
             {
                 float val = ctx.ReadValue<float>();
-                controller.mimic(InputTriggers.RT, val);
-                subs.onTriggerPerformed?.Invoke(InputTriggers.RT, val);
+                controller.inject(InputTriggers.RT, val);
             };
             action(MappingActions.triggerR).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputTriggers.RT, 0f);
-                subs.onTriggerPerformed?.Invoke(InputTriggers.RT, 0f);
+                controller.inject(InputTriggers.RT, 0f);
             };
 
         }
@@ -237,66 +235,56 @@ namespace fwp.gamepad
 
             action(MappingActions.buttonStart).performed += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.START, true);
-                subs.onButtonPerformed?.Invoke(InputButtons.START, true);
+                controller.inject(InputButtons.START, true);
             };
 
             action(MappingActions.buttonStart).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.START, false);
-                subs.onButtonPerformed?.Invoke(InputButtons.START, false);
+                controller.inject(InputButtons.START, false);
             };
 
             // le bouton du nord parmis les XYBA
             action(MappingActions.buttonNorth).performed += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.PAD_NORTH, true);
-                subs.onButtonPerformed?.Invoke(InputButtons.PAD_NORTH, true);
+                controller.inject(InputButtons.PAD_NORTH, true);
             };
 
             action(MappingActions.buttonNorth).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.PAD_NORTH, false);
-                subs.onButtonPerformed?.Invoke(InputButtons.PAD_NORTH, false);
+                controller.inject(InputButtons.PAD_NORTH, false);
             };
 
             // le bouton du sud parmis les XYBA
             action(MappingActions.buttonSouth).performed += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.PAD_SOUTH, true);
-                subs.onButtonPerformed?.Invoke(InputButtons.PAD_SOUTH, true);
+                controller.inject(InputButtons.PAD_SOUTH, true);
             };
 
             action(MappingActions.buttonSouth).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.PAD_SOUTH, false);
-                subs.onButtonPerformed?.Invoke(InputButtons.PAD_SOUTH, false);
+                controller.inject(InputButtons.PAD_SOUTH, false);
             };
 
             // le bouton de gauche parmis les XYBA
             action(MappingActions.buttonWest).performed += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.PAD_WEST, true);
-                subs.onButtonPerformed?.Invoke(InputButtons.PAD_WEST, true);
+                controller.inject(InputButtons.PAD_WEST, true);
             };
 
             action(MappingActions.buttonWest).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.PAD_WEST, false);
-                subs.onButtonPerformed?.Invoke(InputButtons.PAD_WEST, false);
+                controller.inject(InputButtons.PAD_WEST, false);
             };
 
             // le bouton de droite parmis les XYBA
             action(MappingActions.buttonEast).performed += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.PAD_EAST, true);
-                subs.onButtonPerformed?.Invoke(InputButtons.PAD_EAST, true);
+                controller.inject(InputButtons.PAD_EAST, true);
             };
 
             action(MappingActions.buttonEast).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputButtons.PAD_EAST, false);
-                subs.onButtonPerformed?.Invoke(InputButtons.PAD_EAST, false);
+                controller.inject(InputButtons.PAD_EAST, false);
             };
 
         }
@@ -305,48 +293,40 @@ namespace fwp.gamepad
         {
             action(MappingActions.dpadSouth).performed += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputDPad.DPAD_SOUTH, true);
-                subs.onDPadPerformed?.Invoke(InputDPad.DPAD_SOUTH, true);
+                controller.inject(InputDPad.DPAD_SOUTH, true);
             };
 
             action(MappingActions.dpadSouth).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputDPad.DPAD_SOUTH, false);
-                subs.onDPadPerformed?.Invoke(InputDPad.DPAD_SOUTH, false);
+                controller.inject(InputDPad.DPAD_SOUTH, false);
             };
 
             action(MappingActions.dpadWest).performed += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputDPad.DPAD_WEST, true);
-                subs.onDPadPerformed?.Invoke(InputDPad.DPAD_WEST, true);
+                controller.inject(InputDPad.DPAD_WEST, true);
             };
 
             action(MappingActions.dpadWest).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputDPad.DPAD_WEST, false);
-                subs.onDPadPerformed?.Invoke(InputDPad.DPAD_WEST, false);
+                controller.inject(InputDPad.DPAD_WEST, false);
             };
 
             action(MappingActions.dpadEast).performed += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputDPad.DPAD_EAST, true);
-                subs.onDPadPerformed?.Invoke(InputDPad.DPAD_EAST, true);
+                controller.inject(InputDPad.DPAD_EAST, true);
             };
             action(MappingActions.dpadEast).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputDPad.DPAD_EAST, false);
-                subs.onDPadPerformed?.Invoke(InputDPad.DPAD_EAST, false);
+                controller.inject(InputDPad.DPAD_EAST, false);
             };
 
             action(MappingActions.dpadNorth).performed += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputDPad.DPAD_NORTH, true);
-                subs.onDPadPerformed?.Invoke(InputDPad.DPAD_NORTH, true);
+                controller.inject(InputDPad.DPAD_NORTH, true);
             };
             action(MappingActions.dpadNorth).canceled += (InputAction.CallbackContext ctx) =>
             {
-                controller.mimic(InputDPad.DPAD_NORTH, false);
-                subs.onDPadPerformed?.Invoke(InputDPad.DPAD_NORTH, false);
+                controller.inject(InputDPad.DPAD_NORTH, false);
             };
 
         }
@@ -357,154 +337,29 @@ namespace fwp.gamepad
 
             action(MappingActions.joyLeft).performed += (InputAction.CallbackContext ctx) =>
             {
-                Vector2 raw = ctx.ReadValue<Vector2>();
-                joystickPerformed(InputJoystickSide.LEFT, raw);
+                controller.inject(InputJoystickSide.LEFT, ctx.ReadValue<Vector2>(), !ctx.IsKeyboard());
             };
 
             action(MappingActions.joyLeft).canceled += (InputAction.CallbackContext ctx) =>
             {
-                log("LEFT.canceled");
-                joystickCanceled(InputJoystickSide.LEFT);
+                controller.inject(InputJoystickSide.LEFT, Vector2.zero);
             };
 
             //right
 
             action(MappingActions.joyRight).performed += (InputAction.CallbackContext ctx) =>
             {
-                Vector2 raw = ctx.ReadValue<Vector2>();
-                joystickPerformed(InputJoystickSide.RIGHT, raw);
+                controller.inject(InputJoystickSide.RIGHT, ctx.ReadValue<Vector2>(), !ctx.IsKeyboard());
             };
 
             action(MappingActions.joyRight).canceled += (InputAction.CallbackContext ctx) =>
             {
-                log("RIGHT.canceled");
-                joystickCanceled(InputJoystickSide.RIGHT);
+                controller.inject(InputJoystickSide.RIGHT, Vector2.zero, !ctx.IsKeyboard());
             };
 
         }
 
-        void joystickPerformed(InputJoystickSide side, Vector2 raw)
-        {
-            var stick = (side == InputJoystickSide.LEFT) ? controller.leftJoy : controller.rightJoy;
-
-            Vector2 buffDir = stick.joystickDirection;
-            Vector2 direction = get6D(raw);
-            if (direction.x != buffDir.x || direction.y != buffDir.y) // any changes ?
-            {
-                log(side + ".DIR motion ? " + direction);
-                subs.onJoystickDirection?.Invoke(side, direction);
-                buffDir = direction;
-            }
-
-            controller.mimic(side, raw, buffDir);
-
-            log(side + ".RAW motion ? " + raw.x + " x " + raw.y + " , " + raw.sqrMagnitude);
-
-            subs.onJoystickPerformed?.Invoke(side, raw);
-        }
-
-        void joystickCanceled(InputJoystickSide side)
-        {
-            log(side + ".RAW motion stopped");
-
-            var stick = (side == InputJoystickSide.LEFT) ? controller.leftJoy : controller.rightJoy;
-
-            bool punched = stick.Punch;
-
-            if (punched)
-            {
-                log(side + ".<b>PUNCH</b> " + controller.leftJoy.joystickDirection);
-                subs.onJoystickPunchDirection?.Invoke(side, controller.leftJoy.joystickDirection);
-            }
-
-            controller.mimic(side, Vector2.zero, Vector2.zero);
-
-            subs.onJoystickReleased?.Invoke(side);
-        }
-
         void log(string content) => GamepadVerbosity.sLog(GetType() + "&" + name + " >>> " + content, this);
-
-        /// <summary>
-        /// [X,Y] normalized ?
-        /// 
-        /// DIRECTION
-        ///      0
-        ///  -90   90
-        ///     180
-        /// </summary>
-        static public Vector2 get6D(Vector2 joyRaw, float deadZone = 0.5f, bool verbose = false)
-        {
-            if (joyRaw.magnitude < deadZone) return Vector2.zero;
-
-
-            Vector2 ret = Vector2.zero;
-
-            float aSection = 360f / 8f;
-
-            //Debug.Log("---");
-            if (verbose) Debug.Log("?" + joyRaw);
-            //Debug.Log("section?" + aSection);
-
-            joyRaw = joyRaw.normalized;
-
-            float hSection = aSection * 0.5f;
-
-            //Vector2 origin = rotate(Vector2.right, hSection);
-
-            // CW +
-            // CCW -
-            float angle = -Vector2.SignedAngle(joyRaw, Vector2.right);
-            float sCenter;
-
-            //ret.y = angle != 180f && angle != 0f ? 1f : 0f;
-            int cnt = 0;
-
-            float bAngle = angle;
-
-            // -180,0
-            if (angle < 0f)
-            {
-                while (bAngle < -hSection)
-                {
-                    bAngle += aSection;
-                    cnt++;
-                    //if (bAngle < -hSection) cnt++;
-                }
-            }
-            else if (angle > 0f)
-            {
-                while (bAngle > hSection)
-                {
-                    bAngle -= aSection;
-                    cnt++;
-                    //if (bAngle > hSection) cnt++;
-                }
-            }
-
-            sCenter = cnt * aSection * Mathf.Sign(angle);
-
-            if (verbose) Debug.Log("angle ? " + angle + " , cnt?" + cnt + " , center?" + sCenter);
-
-            sCenter *= Mathf.Deg2Rad;
-
-            float c = Mathf.Cos(sCenter);
-            float s = Mathf.Sin(sCenter);
-            //if (Mathf.Abs(c) <= Mathf.Epsilon) c = 0f;
-            //if (Mathf.Abs(s) <= Mathf.Epsilon) s = 0f;
-            if (verbose) Debug.Log(c + "x" + s);
-            joyRaw.x = Mathf.Round(c);
-            joyRaw.y = Mathf.Round(s);
-
-            return joyRaw;
-        }
-
-        public static Vector2 rotate(Vector2 v, float delta)
-        {
-            return new Vector2(
-                v.x * Mathf.Cos(delta) - v.y * Mathf.Sin(delta),
-                v.x * Mathf.Sin(delta) + v.y * Mathf.Cos(delta)
-            );
-        }
 
     }
 

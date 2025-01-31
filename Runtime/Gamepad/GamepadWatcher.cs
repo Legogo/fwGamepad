@@ -22,8 +22,6 @@ namespace fwp.gamepad
         WatcherInput<ISelectable> targets; // normal object
         WatcherInput<ISelectableAbsorb> absorbs; // object that can absorb
 
-        public BlueprintXbox controllerState; // != null after init
-
         System.Guid _guid;
         public int guid
         {
@@ -90,18 +88,13 @@ namespace fwp.gamepad
 
         void setupCallbacks()
         {
-            // this field is serialize, this should never happen but jic
-            if (controllerState == null)
-            {
-                controllerState = new BlueprintXbox();
-            }
-
             InputSubsCallbacks subs = playerInputSys.subs;
 
-            subs.onJoystickDirection += onJoyDirection;
             subs.onJoystickPerformed += onJoystick;
-
             subs.onJoystickReleased += onJoystickRelease;
+            subs.onJoystickDirection += onJoyDirection;
+            subs.onJoystickPunchDirection += onJoyPunch;
+
             subs.onTriggerPerformed += onTrigger;
             subs.onButtonPerformed += onButton;
             subs.onDPadPerformed += onDPad;
@@ -212,14 +205,15 @@ namespace fwp.gamepad
 
         void onJoystickRelease(InputJoystickSide side)
         {
+            // feed selection(s)
             onJoystick(side, Vector2.zero);
-            onJoyDirection(side, Vector2.zero); // joy release
+
+            // no need, managed by sys gamepad
+            //onJoyDirection(side, Vector2.zero); // joy release
         }
 
         void onJoystick(InputJoystickSide side, Vector2 value)
         {
-            controllerState.mimic(side, value);
-
             if (absorbs.onJoystick(side, value))
             {
                 return;
@@ -230,8 +224,6 @@ namespace fwp.gamepad
 
         void onJoyDirection(InputJoystickSide side, Vector2 value)
         {
-            controllerState.mimicDirection(side, value);
-
             if (absorbs.onJoystickDirection(side, value))
             {
                 return;
@@ -240,10 +232,14 @@ namespace fwp.gamepad
             targets.onJoystickDirection(side, value);
         }
 
+        void onJoyPunch(InputJoystickSide side, Vector2 value)
+        {
+            if (absorbs.onJoystickPunch(side, value)) return;
+            targets.onJoystickPunch(side, value);
+        }
+
         void onTrigger(InputTriggers side, float value)
         {
-            controllerState.mimic(side, value);
-
             if (absorbs.onTrigger(side, value))
             {
                 return;
@@ -254,8 +250,6 @@ namespace fwp.gamepad
 
         private void onButton(InputButtons type, bool status)
         {
-            controllerState.mimic(type, status);
-
             if (absorbs.onButton(type, status))
             {
                 return;
@@ -266,8 +260,6 @@ namespace fwp.gamepad
 
         private void onDPad(InputDPad type, bool status)
         {
-            controllerState.mimic(type, status);
-
             if (absorbs.onDPad(type, status))
             {
                 return;

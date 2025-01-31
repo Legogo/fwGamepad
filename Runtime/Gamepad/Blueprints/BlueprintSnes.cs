@@ -9,24 +9,24 @@ namespace fwp.gamepad.blueprint
     [System.Serializable]
     public class BlueprintSnes : BlueprintNes
     {
-        public ControllerButtonState bumpLeft;
-        public ControllerButtonState bumpRight;
+        public ControllerButtonState shoulderLeft = new ControllerButtonState();
+        public ControllerButtonState shoulderRight = new ControllerButtonState();
 
-        public ControllerButtonState pad_north;  // Y
-        public ControllerButtonState pad_west;   // X
+        public ControllerButtonState pad_north = new ControllerButtonState();  // Y
+        public ControllerButtonState pad_west = new ControllerButtonState();   // X
 
-        override public void mimic(InputButtons type, bool state)
+        public BlueprintSnes(InputSubsCallbacks subs = null) : base(subs)
+        { }
+
+        override protected ControllerButtonState getButton(InputButtons type)
         {
-            base.mimic(type, state);
-
             switch (type)
             {
-                case InputButtons.BL:
-                    bumpLeft.inject(state);
-                    break;
-                case InputButtons.BR:
-                    bumpRight.inject(state);
-                    break;
+                case InputButtons.PAD_NORTH: return pad_north;
+                case InputButtons.PAD_WEST: return pad_west;
+                case InputButtons.BL: return shoulderLeft;
+                case InputButtons.BR: return shoulderRight;
+                default: return base.getButton(type);
             }
         }
 

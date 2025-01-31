@@ -5,9 +5,24 @@ using UnityEngine;
 namespace fwp.gamepad.state
 {
     [System.Serializable]
-    public struct ControllerJoystickState
+    public class ControllerJoystickState
     {
-        public Vector2 joystick; // raw signal
+        /// <summary>
+        /// 1/X seconds
+        /// 30f ~= 10 frames
+        /// </summary>
+        public const float keyboardKeyGravity = 30f;
+
+        public Vector2 joystick; // acutal solved gameplay value
+
+        Vector2 joystickRaw; // raw signal, last known real input value
+
+        /// <summary>
+        /// when using keyboard we simulate progressive pressing of the joystick
+        /// instead of jumping to max value instantly
+        /// to avoid issue when canceling joystick usage because humans usualy don't release two keys during the same frame 
+        /// </summary>
+        Vector2 joystickIntention; // used for keyboard
 
         /// <summary>
         ///    N (0,1)
@@ -16,60 +31,95 @@ namespace fwp.gamepad.state
         /// </summary>
         public Vector2 joystickDirection; // last "direction" NESW
 
-        float timerValid; // internal timer
-
         public float lastAngle; // last movement angle
+
+        const float timerPunchTime = 0.33f;
+        float timerPunch; // internal timer
+
+        public float PunchTimer => timerPunch;
 
         /// <summary>
         /// pressed a direction and quickly returned to neutral
         /// </summary>
-        public bool Punch => timerValid > 0f;
+        public bool Punch => timerPunch > 0f;
 
-        public void injectDirection(Vector2 value)
+        void setDirection(Vector2 value)
         {
-            if(joystickDirection.sqrMagnitude != 0f)
+            // in value has SQR magnitude :
+            // 0 = cancel
+            // 1 = one direction
+            // 2 = two directions
+
+            //Debug.Log(value + " & " + value.sqrMagnitude + " <=> " + joystickDirection);
+
+            if (value.sqrMagnitude != 0f)
             {
                 if (!Punch || value != joystickDirection)
                 {
-                    timerValid = 0.33f;
+                    timerPunch = timerPunchTime;
+                    //Debug.Log("+punch");
                 }
             }
 
             joystickDirection = value;
         }
 
-        public void inject(Vector2 value)
+        public bool injectIntention(Vector2 value, bool snap)
         {
-            lastAngle = Vector2.Angle(value, joystick);
-            joystick = value;
+            if (joystickIntention == value) return false;
+
+            joystickIntention = value;
+
+            joystickRaw = value;
+            lastAngle = Vector2.Angle(value, joystickRaw);
+
+            if (snap) joystick = joystickIntention;
+
+            return true;
         }
 
-        public void inject(Vector2 value, Vector2 dir)
+        /// <summary>
+        /// true : direction changed
+        /// </summary>
+        public bool injectDirection(Vector2 value)
         {
-            inject(value);
+            // get diff in integer
+            Vector2 intDirection = value.get6D();
 
-            injectDirection(dir);
-        }
-
-        public void onValidMotion()
-        {
-            timerValid = 0.5f;
-        }
-
-        public bool update(float dt)
-        {
-            if (timerValid > 0f)
+            if (intDirection.x != joystickDirection.x || intDirection.y != joystickDirection.y) // any changes ?
             {
-                timerValid -= dt;
-                //Debug.Log(timerValid);
-                if (timerValid <= 0f)
+                setDirection(intDirection);
+                return true;
+            }
+            return false;
+        }
+
+        public bool updateIntention(float dt)
+        {
+            if (joystick != joystickIntention)
+            {
+                joystick = Vector2.MoveTowards(joystick, joystickIntention, dt * keyboardKeyGravity);
+                return true;
+            }
+            return false;
+        }
+
+        public bool updateTimer(float dt)
+        {
+            if (timerPunch > 0f)
+            {
+                timerPunch -= dt;
+                if (timerPunch <= 0f)
                 {
+                    //Debug.Log("-punch");
                     return true;
                 }
             }
 
             return false;
         }
+
+
     }
 
 }

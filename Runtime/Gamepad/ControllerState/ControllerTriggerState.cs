@@ -5,15 +5,20 @@ using UnityEngine;
 
 namespace fwp.gamepad.state
 {
-    public struct ControllerTriggerState
+    public class ControllerTriggerState
     {
         public float pression;
 
         public bool state => pression > 0f;
 
-        public void inject(float value)
+        public bool inject(float value)
         {
-            pression = value;
+            if(pression != value)
+            {
+                pression = value;
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -47,9 +47,18 @@ namespace fwp.gamepad
     }
 
 	/// <summary>
+	/// when joystick point a direction and cancel quickly
+	/// </summary>
+	public interface ISelectableJoyPunch : IselectableInput
+	{
+		public void onJoyLeftPunch(Vector2 value);
+		public void onJoyRightPunch(Vector2 value);
+	}
+
+	/// <summary>
 	/// raw joystick signal
 	/// </summary>
-    public interface ISelectableJoy : IselectableInput
+	public interface ISelectableJoy : IselectableInput
     {
 		public void onJoyLeft(Vector2 value);
 		public void onJoyRight(Vector2 value);
