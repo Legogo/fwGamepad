@@ -9,6 +9,7 @@ static public class InputSystemExtensions
 
     static public bool IsKeyboard(this InputAction.CallbackContext device)
     {
-        return device.control.device.displayName == device_keyboard;
+        //return device.control.device.displayName == device_keyboard;
+        return device.control.device == Keyboard.current;
     }
 }
