@@ -137,6 +137,8 @@ public class WatcherInput<SelectorType> where SelectorType : ISelectable
     {
         for (int i = queue.Count - 1; i >= 0; i--)
         {
+            if (queue[i] is ISelectableJoy joy) joy.onJoyPunch(side, value);
+
             ISelectableJoyDirection elmt = queue[i] as ISelectableJoyDirection;
             if (elmt != null)
             {
@@ -163,13 +165,14 @@ public class WatcherInput<SelectorType> where SelectorType : ISelectable
 
         for (int i = queue.Count - 1; i >= 0; i--)
         {
-            ISelectableJoy elmt = queue[i] as ISelectableJoy;
-            if (elmt != null)
+            if (queue[i] is ISelectableJoy joy) joy.onJoy(side, value);
+
+            if (queue[i] is ISelectableJoys joys)
             {
                 switch (side)
                 {
-                    case InputJoystickSide.LEFT: elmt.onJoyLeft(value); break;
-                    case InputJoystickSide.RIGHT: elmt.onJoyRight(value); break;
+                    case InputJoystickSide.LEFT: joys.onJoyLeft(value); break;
+                    case InputJoystickSide.RIGHT: joys.onJoyRight(value); break;
                 }
             }
 
@@ -185,6 +188,8 @@ public class WatcherInput<SelectorType> where SelectorType : ISelectable
 
         for (int i = queue.Count - 1; i >= 0; i--)
         {
+            if (queue[i] is ISelectableJoy joy) joy.onJoyPunch(side, value);
+
             ISelectableJoyPunch elmt = queue[i] as ISelectableJoyPunch;
             if (elmt != null)
             {
