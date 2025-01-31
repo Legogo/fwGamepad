@@ -26,8 +26,6 @@ namespace fwp.gamepad
     /// </summary>
     public class InputSysGamepad : MonoBehaviour
     {
-        blueprint.BlueprintXbox controller; // last known state
-
         /// <summary>
         /// when InputSystem triggers it will activates the callbacks
         /// within this InputSubs
@@ -86,6 +84,12 @@ namespace fwp.gamepad
         public InputDevice sysDevice;
         public PlayerInput sysPlayerInput; // unity.PlayerInput > link with unity InputSystem
 
+        blueprint.BlueprintXbox controller; // last known state
+
+        /// <summary>
+        /// internal controller state
+        /// </summary>
+        public blueprint.BlueprintXbox Controller => controller;
 
         private void Awake()
         {
