@@ -137,7 +137,7 @@ public class WatcherInput<SelectorType> where SelectorType : ISelectable
     {
         for (int i = queue.Count - 1; i >= 0; i--)
         {
-            if (queue[i] is ISelectableJoy joy) joy.onJoyPunch(side, value);
+            if (queue[i] is ISelectableJoy joy) joy.onJoyDirection(side, value);
 
             ISelectableJoyDirection elmt = queue[i] as ISelectableJoyDirection;
             if (elmt != null)
